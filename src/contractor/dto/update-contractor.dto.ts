@@ -20,6 +20,10 @@ export class UpdateContractorDto extends PartialType(CreateContractorDto) {
 
   password: string;
 
+  cep: string;
+
+  address:string;
+
   city: string;
 
   state: string;

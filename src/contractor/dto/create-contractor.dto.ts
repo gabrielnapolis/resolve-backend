@@ -17,6 +17,10 @@ export class CreateContractorDto {
 
   password: string;
 
+  cep: string;
+
+  address:string;
+
   state: string;
 
   city: string;

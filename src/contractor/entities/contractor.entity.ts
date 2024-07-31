@@ -56,6 +56,16 @@ export class Contractor {
   @Column({
     nullable: true,
   })
+  cep:string;
+
+  @Column({
+    nullable: true,
+  })
+  address:string;
+
+  @Column({
+    nullable: true,
+  })
   city: string;
 
   @Column({
