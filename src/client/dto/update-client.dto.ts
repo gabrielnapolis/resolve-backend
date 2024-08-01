@@ -1,6 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateClientDto } from './create-client.dto';
-import { Job } from 'src/job/entities/job.entity';
 
 export class UpdateClientDto extends PartialType(CreateClientDto) {
   id: string;
@@ -18,6 +17,4 @@ export class UpdateClientDto extends PartialType(CreateClientDto) {
   state?: string;
 
   city?: string;
-  
-  jobs: Job[];
 }

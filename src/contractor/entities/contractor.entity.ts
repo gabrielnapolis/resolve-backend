@@ -1,4 +1,3 @@
-import { Job } from 'src/job/entities/job.entity';
 import { PrimaryGeneratedColumn, Column, OneToMany, Entity } from 'typeorm';
 import { ContractorSpeciality } from './contractorSpeciality.entity';
 @Entity()
@@ -92,8 +91,4 @@ export class Contractor {
   )
  
   specialities: ContractorSpeciality[];
-
-  @OneToMany((type) => Job, (job) => job.contractor)
-
-  jobs: Job[];
 }

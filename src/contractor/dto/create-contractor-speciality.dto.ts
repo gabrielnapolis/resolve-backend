@@ -6,9 +6,4 @@ export class CreateContractorSpecialityDto {
   contractor:Contractor
   
   speciality:Speciality
-
-  price:number
-
-  //tipo de cobrança
-  priceType: string;
 }

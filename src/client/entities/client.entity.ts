@@ -1,6 +1,4 @@
 
-import { Job } from "src/job/entities/job.entity"
-import { JobSpeciality } from "src/job/entities/jobSpeciality.entity"
 import { PrimaryGeneratedColumn, Column, Entity,} from "typeorm"
 
 @Entity()

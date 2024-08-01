@@ -2,7 +2,6 @@
 import { DataSource } from 'typeorm';
 import { Contractor } from '../contractor/entities/contractor.entity';
 import { Client } from 'src/client/entities/client.entity';
-import { Job } from 'src/job/entities/job.entity';
 
 import { Speciality } from '../speciality/entities/speciality.entity';
 import { ContractorSpeciality } from 'src/contractor/entities/contractorSpeciality.entity';
@@ -21,7 +20,6 @@ export const databaseProviders = [
         entities: [
          Contractor,
          Client,
-         Job,
          ContractorSpeciality,
          Speciality
         ],

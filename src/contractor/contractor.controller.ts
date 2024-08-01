@@ -21,8 +21,6 @@ export class ContractorController {
         specialities.forEach(async spec=>{
           let contractorSpeciality:CreateContractorSpecialityDto={
             speciality:spec,
-            price:100,
-            priceType:"Diaria",
             contractor:contractor
           }
           let specSaved = await this.contractorService.addContractorSpeciliaty(contractorSpeciality)

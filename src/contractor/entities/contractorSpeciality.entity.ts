@@ -7,15 +7,9 @@ export class ContractorSpeciality {
   @PrimaryGeneratedColumn()
   id: string;
  
-  @ManyToOne((type) => Contractor, (job) => job.id)
+  @ManyToOne((type) => Contractor)
   contractor: Contractor;
 
-  @ManyToOne((type) => Speciality, (job) => job.id)
+  @ManyToOne((type) => Speciality)
   speciality: Speciality;
-  
-  @Column()
-  price: number;
-  @Column()
-  //tipo de cobrança
-  priceType: string;
 }

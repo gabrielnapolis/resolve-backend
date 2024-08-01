@@ -15,7 +15,7 @@ export class ContractorService {
     @Inject('CONTRACTOR_SPECIALITY_REPOSITORY')
     private contractorSpeciliatyRepository: Repository<ContractorSpeciality>,
   ) {}
-  
+
   async create(createContractorDto: CreateContractorDto) {
     try {
       return this.contractorRepository.save(createContractorDto);
@@ -75,6 +75,7 @@ export class ContractorService {
   remove(id: string) {
     return this.contractorRepository.delete({ id: id });
   }
+  
   async addContractorSpeciliaty(
     createContractorSpecilityDto: CreateContractorSpecialityDto,
   ) {
@@ -86,6 +87,7 @@ export class ContractorService {
       console.log(error);
     }
   }
+  
   async searchContractorBySpeciliaty(specialityId: string) {
     let contractors = await this.contractorSpeciliatyRepository
       .createQueryBuilder('contractorSpeciliaty')
@@ -96,6 +98,7 @@ export class ContractorService {
     console.log(contractors);
     return contractors;
   }
+
   listSpeciliatyByContractor(contractorId: string) {
     try {
       this.contractorSpeciliatyRepository.find();

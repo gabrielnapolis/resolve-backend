@@ -6,8 +6,4 @@ export class Speciality {
 
     @Column()
     fullname:string
-    
-    @Column()
-    logoPath:string
-
 }

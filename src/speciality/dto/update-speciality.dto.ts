@@ -6,6 +6,4 @@ export class UpdateSpecialityDto extends PartialType(CreateSpecialityDto) {
     id:string
 
     fullname:string
-    
-    logoPath:string
 }
