@@ -10,9 +10,10 @@ import { SpecialityModule } from './speciality/speciality.module';
 import { RegionsModule } from './regions/regions.module';
 import { NeighborhoodModule } from './neighborhood/neighborhood.module';
 import { ReviewModule } from './review/review.module';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
-  imports: [ContractorModule, ClientModule, SharedModule, AuthModule, DatabaseModule, SpecialityModule, RegionsModule, NeighborhoodModule, ReviewModule],
+  imports: [ContractorModule, ClientModule, SharedModule, AuthModule, DatabaseModule, SpecialityModule, RegionsModule, NeighborhoodModule, ReviewModule, PaymentModule],
   controllers: [AppController],
   providers: [AppService],
 })
