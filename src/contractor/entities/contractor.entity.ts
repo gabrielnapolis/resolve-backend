@@ -85,6 +85,11 @@ export class Contractor {
   })
   active: boolean;
 
+  @Column({
+    nullable: true,
+  })
+  subscriberId: string;
+
   @OneToMany(
     (type) => ContractorSpeciality,
     (speciality) => speciality.contractor,

@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { PaymentService } from './payment.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 
 @Controller('payment')
 export class PaymentController {
@@ -10,6 +11,11 @@ export class PaymentController {
   @Post()
   create(@Body() createPaymentDto: CreatePaymentDto) {
     return this.paymentService.create(createPaymentDto);
+  }
+
+  @Post()
+  subscribe(@Body() createSubscriptionDto: CreateSubscriptionDto) {
+    return this.paymentService.subscribe(createSubscriptionDto);
   }
 
   @Get()
