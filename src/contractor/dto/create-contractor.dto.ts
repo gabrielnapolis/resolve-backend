@@ -33,5 +33,5 @@ export class CreateContractorDto {
 
   isAdmin: boolean;
 
-  active: boolean;
+  active: boolean = true;
 }

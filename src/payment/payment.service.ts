@@ -23,25 +23,36 @@ export class PaymentService {
     return 'This action adds a new payment';
   }
 
-  async subscribe(dto: CreateSubscriptionDto): Promise<SubscriptionResponseDTO> {
-    let contractor = await this.subscriptionRepository.getActiveContractorByid('id');
-    let plan = await this.subscriptionRepository.getPlanById(
-      dto.planId,
+  async subscribe(
+    dto: CreateSubscriptionDto,
+  ): Promise<SubscriptionResponseDTO> {
+    let contractor = await this.subscriptionRepository.getActiveContractorByid(
+      dto.userId,
     );
-    const pagbankPlan = await this.paymentPlatform.getPlanById(
-      dto.planId,
-    );
+    if (!contractor) return { success: false, errors: ['User not found.'] };
 
-    if (!plan || plan.active || pagbankPlan.active != 'ACTIVE') {
-      this.subscriptionRepository.deactivatePlan(plan?.id)
+    const defaultPlanId = '1';
+    let plan = await this.subscriptionRepository.getPlanById(defaultPlanId);
+    if (!plan) return { success: false, errors: ['Plan not found.'] };
+
+    const pagbankPlan = await this.paymentPlatform.getPlanById(
+      plan.external_id,
+    );
+    if (!pagbankPlan || pagbankPlan.status != 'ACTIVE') {
+      this.subscriptionRepository.deactivatePlan(plan?.id);
       return { success: false, errors: ['Plan not found.'] };
     }
-    if (!contractor) return { success: false, errors: ['Plan not found.'] };
 
-    let pagbankData = PagbankSubscriptionDTO.build(dto);
+    let pagbankData = PagbankSubscriptionDTO.build(
+      plan.external_id,
+      contractor,
+      dto,
+    );
     if (contractor.subscriberId) {
       let sub =
-        this.subscriptionRepository.findActivePlanByContractor(contractor);
+        await this.subscriptionRepository.findActiveSubscritionByContractor(
+          contractor,
+        );
       if (sub)
         return {
           success: false,
@@ -51,8 +62,7 @@ export class PaymentService {
       pagbankData.setSubscriberId(contractor.subscriberId);
     }
 
-    pagbankData.setAmount(plan.price);
-
+    pagbankData.setAmount(pagbankPlan.amount.value);
     let payment = await this.paymentPlatform.subscribe(pagbankData);
     if (!payment)
       return {
@@ -62,13 +72,13 @@ export class PaymentService {
 
     let subscription = {
       externalId: payment.id,
-      plan: plan,
-      contractor: contractor,
+      plan: { id: plan.id },
+      contractor: { id: contractor.id },
       active: true,
       externalStatus: payment.status,
     } as Subscription;
 
-    this.subscriptionRepository.create(subscription);
+    await this.subscriptionRepository.create(subscription);
     await this.subscriptionRepository.updateSubscriberId(
       contractor,
       payment.customer.id,
@@ -76,16 +86,20 @@ export class PaymentService {
 
     return {
       success: true,
-      data: payment,
+      data: subscription,
     };
   }
 
   async cancelSubscription() {
-    let contractor = await this.subscriptionRepository.getActiveContractorByid('id');
-    let subscription = await this.subscriptionRepository.findActivePlanByContractor(contractor);
+    let contractor =
+      await this.subscriptionRepository.getActiveContractorByid('id');
+    let subscription =
+      await this.subscriptionRepository.findActiveSubscritionByContractor(
+        contractor,
+      );
 
-    if(!subscription) return "subscription not found";
-    
+    if (!subscription) return 'subscription not found';
+
     await this.paymentPlatform.cancelSubscription(subscription.id);
     return;
   }

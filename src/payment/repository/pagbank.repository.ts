@@ -13,7 +13,7 @@ export class PagbankRepository {
   };
 
   async subscribe(paymentData: PagbankSubscriptionDTO) {
-    console.log("sending data... ", JSON.stringify(paymentData));
+    console.log('\nEnviando dados para assinatura: ', JSON.stringify(paymentData))
 
     const url = `${this.URL_BASE}/subscriptions`;
     const options = {
@@ -23,10 +23,11 @@ export class PagbankRepository {
     };
 
     let response = await fetch(url, options)
+    let data = await response.json();
 
-    console.log('response data: ', JSON.stringify(response));
-    if(response.status === 200)
-      return response.json()
+    console.log('\nResposta assinatura: ', JSON.stringify(data))
+    if(response.status == 201)
+      return data
 
     return null;
   }
@@ -48,13 +49,16 @@ export class PagbankRepository {
 
   async getPlanById(planId: string) {
     const url = `${this.URL_BASE}/plans/${planId}`;
+
+    console.log('Obtendo o plano em: ', url, '\r');
     const options = {
       method: 'GET',
       headers: this.headers,
     };
 
     let response = await fetch(url, options);
-
+    console.log(response.status)
+    
     if (response.status === 200) return response.json();
 
     return null;

@@ -4,6 +4,12 @@ import { AuthController } from './auth.controller';
 
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { authProviders } from './auth.providers';
+import { DatabaseModule } from 'src/database/database.module';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './strategy/passport.strategy';
+import { JwtAuthGuard } from './guard/passport-auth.guard';
+import { PaymentModule } from 'src/payment/payment.module';
 
 @Module({imports: [
   JwtModule.registerAsync({
@@ -18,8 +24,15 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     isGlobal: true,
     envFilePath: '.env',
   }),
+  PassportModule,
+  DatabaseModule,
+  PaymentModule
 ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [
+    AuthService, 
+    JwtStrategy,
+    JwtAuthGuard, 
+    ...authProviders],
 })
 export class AuthModule {}

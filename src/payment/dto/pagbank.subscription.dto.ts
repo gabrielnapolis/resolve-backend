@@ -1,6 +1,9 @@
+import { Contractor } from 'src/contractor/entities/contractor.entity';
 import { CreateSubscriptionDto } from './create-subscription.dto';
 
 export default class PagbankSubscriptionDTO {
+  constructor() {}
+
   plan: { id: string };
   customer: CustomerPayload;
   pro_rata: boolean = false;
@@ -15,36 +18,53 @@ export default class PagbankSubscriptionDTO {
 
   setAmount(amount: number) {
     this.amount = {
-        currency: 'BRL',
-        value: amount,
-      }
+      currency: 'BRL',
+      value: amount,
+    };
   }
 
-  static build(dto: CreateSubscriptionDto): PagbankSubscriptionDTO {
-    return {
-      plan: {
-        id: dto.planId,
-      },
-      customer: {
-        name: dto.customer.name,
-        email: dto.customer.email,
-        phones: dto.customer.phones,
-        tax_id: dto.customer.tax_id,
-      },
-      amount: {
-        currency: 'BRL',
-        value: 0,
-      },
-      payment_method: [
+  static build(
+    planId: string,
+    contractor: Contractor,
+    dto: CreateSubscriptionDto,
+  ): PagbankSubscriptionDTO {
+    let pag = new PagbankSubscriptionDTO();
+    pag.plan = { id: planId };
+    pag.customer = {
+      name: contractor.fullname,
+      email: contractor.email,
+      tax_id: dto.cpf.replace(/\D/g, ''),
+      phones: [
         {
-          type: PAYMENT_TYPE.CreditCard,
-          card: {
-            security_code: dto.card,
-          },
+          country: '55',
+          area: contractor.fone.substring(0, 2),
+          number: contractor.fone.substring(2, contractor.fone.length),
         },
       ],
-      pro_rata: false
-    } as PagbankSubscriptionDTO;
+      billing_info: [{
+        type: PAYMENT_TYPE.CreditCard,
+        card: {
+          encrypted: dto.card
+        }
+      }]
+    };
+
+    pag.amount = {
+      currency: 'BRL',
+      value: 0,
+    };
+
+    pag.payment_method = [
+      {
+        type: PAYMENT_TYPE.CreditCard,
+        card: {
+          encrypted: dto.card,
+          security_code: dto.cvv
+        },
+      },
+    ];
+    pag.pro_rata = false;
+    return pag;
   }
 }
 
@@ -67,7 +87,8 @@ export type CustomerPayload = {
 export interface PaymentMethod {
   type: PAYMENT_TYPE;
   card: {
-    security_code: string;
+    encrypted: string;
+    security_code: string
   };
 }
 

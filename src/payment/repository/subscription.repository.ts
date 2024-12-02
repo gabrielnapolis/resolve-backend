@@ -11,16 +11,14 @@ export class SubscriptionRepository {
     private subscriptionRepository: Repository<Subscription>,
     @Inject('CONTRACTOR_REPOSITORY')
     private contractorRepository: Repository<Contractor>,
-    @Inject('PLAN_REPOSITORY') 
+    @Inject('PLAN_REPOSITORY')
     private planRepository: Repository<Plan>,
   ) {}
 
   async getActiveContractorByid(id: string) {
-    return await this.contractorRepository.findOne({
-      where: {
-        active: true,
-        id: id,
-      },
+    return await this.contractorRepository.findOneBy({
+      id: id,
+      active: true,
     });
   }
 
@@ -28,26 +26,28 @@ export class SubscriptionRepository {
     return await this.planRepository.findOne({
       where: {
         id: id,
+        active: true,
       },
     });
   }
 
-  async findActivePlanByContractor(contractor) {
+  async findActiveSubscritionByContractor(contractor): Promise<Subscription | null> {
     return await this.subscriptionRepository.findOne({
-        where: {
-          active: true,
-          contractor: {
-            id: contractor.id,
-          },
+      where: {
+        active: true,
+        contractor: {
+          id: contractor.id,
         },
-        order: {
-            createdAt: 'desc'
-        }
-      });
+      },
+      order: {
+        createdAt: 'desc',
+      },
+    });
   }
 
-  create(subscription: Subscription) {
-    return this.subscriptionRepository.create(subscription);
+  async create(subscription: Subscription) {
+    console.log('\nSalvando dados:', JSON.stringify(subscription))
+    await this.subscriptionRepository.save(subscription);
   }
 
   async updateSubscriberId(contractor: Contractor, subscriberId: string) {
@@ -56,6 +56,6 @@ export class SubscriptionRepository {
   }
 
   async deactivatePlan(planId: string) {
-    await this.planRepository.update(planId, {active: false});
+    await this.planRepository.update(planId, { active: false });
   }
 }

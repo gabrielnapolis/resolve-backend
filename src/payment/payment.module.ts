@@ -8,8 +8,13 @@ import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
   controllers: [PaymentController],
-  providers: [PaymentService, PagbankRepository, SubscriptionRepository, ...paymentProviders],
-  imports:[DatabaseModule]
+  providers: [
+    PaymentService, 
+    PagbankRepository, 
+    SubscriptionRepository, 
+    ...paymentProviders],
+  imports:[DatabaseModule],
+  exports: [SubscriptionRepository]
 
 })
 export class PaymentModule {}

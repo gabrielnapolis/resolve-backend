@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, UsePipes, ValidationPipe} from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { JwtAuthGuard } from 'src/auth/guard/passport-auth.guard';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 
 @Controller('payment')
@@ -12,10 +13,13 @@ export class PaymentController {
   create(@Body() createPaymentDto: CreatePaymentDto) {
     return this.paymentService.create(createPaymentDto);
   }
-
-  @Post()
-  subscribe(@Body() createSubscriptionDto: CreateSubscriptionDto) {
-    return this.paymentService.subscribe(createSubscriptionDto);
+  
+  @UsePipes(new ValidationPipe())
+  @UseGuards(JwtAuthGuard)
+  @Post('/subscribe')
+  subscribe(@Body() dto: CreateSubscriptionDto, @Request() request) {
+    dto.userId = request.user.id;
+    return this.paymentService.subscribe(dto);
   }
 
   @Get()

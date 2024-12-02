@@ -1,13 +1,33 @@
-import { PaymentPhone } from './pagbank.subscription.dto';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateSubscriptionDto {
-  planId: string;
-  customer: {
-    name?: string;
-    email?: string;
-    tax_id?: string; //cpf-cnpj
-    phones?: PaymentPhone[];
-  }
+  @IsNotEmpty()
+  @IsString()
+  nameCard: string;
+
+  @IsNotEmpty()
+  @IsString()
+  cpf: string;
+
+  @IsNotEmpty()
+  @IsString()
   card: string;
-  payment_method: string;
+
+  @IsNotEmpty()
+  @IsString()
+  cvv: string;
+
+  @IsNotEmpty()
+  @IsString()
+  numberCard: string;
+
+  @IsNotEmpty()
+  @IsString()
+  year: string;
+
+  @IsNotEmpty()
+  @IsString()
+  month: string;
+  
+  userId: string;
 }
