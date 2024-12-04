@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { GoogleAuthGuard } from './google-auth.guard';
-import { FacebookAuthGuard } from './facebook-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -23,13 +22,13 @@ export class AuthController {
 
 
    @Get('facebook')
-   @UseGuards(FacebookAuthGuard)
+
    async facebookAuth() {
      // O Guard vai automaticamente redirecionar para o Facebook para autenticação
    }
  
    @Get('facebook/callback')
-   @UseGuards(FacebookAuthGuard)
+
    async facebookAuthRedirect() {
      // Depois que o usuário for autenticado com sucesso, ele será redirecionado aqui
      return 'Usuário autenticado com sucesso com o Facebook';
