@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { FindManyOptions, MoreThan, Repository } from 'typeorm';
 import { Subscription } from '../entities/subscription.entity';
 import { Contractor } from 'src/contractor/entities/contractor.entity';
 import { Plan } from '../entities/plan.entity';
@@ -31,14 +31,34 @@ export class SubscriptionRepository {
     });
   }
 
-  async findActiveSubscritionByContractor(contractor): Promise<Subscription | null> {
+  async update(data: Subscription){
+    await this.subscriptionRepository.update(data.id, data);
+  } 
+
+  async find(whereClause: FindManyOptions<Subscription>): Promise<Subscription[] | null>  {
+    return await this.subscriptionRepository.find(whereClause);
+  }
+
+  async findActiveSubscritionByContractor(
+    contractor,
+  ): Promise<Subscription | null> {
     return await this.subscriptionRepository.findOne({
-      where: {
-        active: true,
-        contractor: {
-          id: contractor.id,
+      where: [
+        {
+          active: true,
+          contractor: {
+            id: contractor.id,
+          },
         },
-      },
+        {
+          active: false,
+          nextInvoiceAt: MoreThan(new Date()),
+          externalStatus: 'ACTIVE',
+          contractor: {
+            id: contractor.id,
+          },
+        },
+      ],
       order: {
         createdAt: 'desc',
       },
@@ -46,7 +66,7 @@ export class SubscriptionRepository {
   }
 
   async create(subscription: Subscription) {
-    console.log('\nSalvando dados:', JSON.stringify(subscription))
+    console.log('\nSalvando dados:', JSON.stringify(subscription));
     await this.subscriptionRepository.save(subscription);
   }
 

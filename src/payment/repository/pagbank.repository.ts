@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import PagbankSubscriptionDTO from '../dto/pagbank.subscription.dto';
+import { PagBank } from '../dto/pagbank.subscription.dto';
 
 @Injectable()
 export class PagbankRepository {
+  generateQrCode(pagbankData: PagBank.IPagBankPaymentType) {
+    throw new Error('Method not implemented.');
+  }
   private URL_BASE = process.env.PAGSEGURO_SUBSCRIPTION
   constructor() {}
 
@@ -12,7 +15,7 @@ export class PagbankRepository {
     Authorization: `Bearer ${process.env.PAGSEGURO_TOKEN}`,
   };
 
-  async subscribe(paymentData: PagbankSubscriptionDTO) {
+  async subscribe(paymentData: PagBank.SubscriptionDTO) {
     console.log('\nEnviando dados para assinatura: ', JSON.stringify(paymentData))
 
     const url = `${this.URL_BASE}/subscriptions`;
@@ -31,6 +34,27 @@ export class PagbankRepository {
 
     return null;
   }
+  
+  async generatePixQrCode(paymentData: PagBank.PixDTO) {
+    console.log('\nEnviando dados para pagamento com pix: ', JSON.stringify(paymentData))
+
+    const url = `${process.env.PAGSEGURO_PIX}/orders`;
+    const options = {
+      method: 'POST',
+      headers: this.headers,
+      body: JSON.stringify(paymentData),
+    };
+
+    let response = await fetch(url, options)
+    let data = await response.text();
+
+    console.log('\nResposta pagamento com pix: ', data)
+    if(response.status == 201)
+      return JSON.parse(data);
+
+    return null;
+  }
+
 
   async cancelSubscription(subscriptionId: string) {
     const url = `${this.URL_BASE}/subscriptions/${subscriptionId}/cancel`;
@@ -39,9 +63,11 @@ export class PagbankRepository {
       headers: this.headers,
     };
 
+    console.log(url);
+
     let response = await fetch(url, options);
 
-    if (response.status === 200) return response.json();
+    if (response.status === 201) return response.json();
 
     return null;
 
@@ -58,6 +84,22 @@ export class PagbankRepository {
 
     let response = await fetch(url, options);
     console.log(response.status)
+    
+    if (response.status === 200) return response.json();
+
+    return null;
+  }
+
+  async capturePix(orderId: string) {
+    const url = `${process.env.PAGSEGURO_PIX}/orders/${orderId}`;
+
+    console.log('Obtendo o order em: ', url, '\r');
+    const options = {
+      method: 'GET',
+      headers: this.headers,
+    };
+
+    let response = await fetch(url, options);
     
     if (response.status === 200) return response.json();
 

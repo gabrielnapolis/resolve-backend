@@ -1,44 +1,59 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, UsePipes, ValidationPipe} from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  UseGuards,
+  Request,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { PaymentService } from './payment.service';
-import { CreatePaymentDto } from './dto/create-payment.dto';
-import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { JwtAuthGuard } from 'src/auth/guard/passport-auth.guard';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 
+@UseGuards(JwtAuthGuard)
 @Controller('payment')
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
-  @Post()
-  create(@Body() createPaymentDto: CreatePaymentDto) {
-    return this.paymentService.create(createPaymentDto);
-  }
-  
   @UsePipes(new ValidationPipe())
-  @UseGuards(JwtAuthGuard)
   @Post('/subscribe')
   subscribe(@Body() dto: CreateSubscriptionDto, @Request() request) {
     dto.userId = request.user.id;
     return this.paymentService.subscribe(dto);
   }
 
-  @Get()
-  findAll() {
-    return this.paymentService.findAll();
+  @Post('/subscription/cancel')
+  async cancel(@Request() request) {
+    let userId = request.user.id;
+    return await this.paymentService.cancelSubscription(userId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.paymentService.findOne(+id);
+  @Get('/subscription/me')
+  async findUserSubscription(@Request() request) {
+    let userId = request.user.id;
+    return this.paymentService.findUserSubscription(userId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePaymentDto: UpdatePaymentDto) {
-    return this.paymentService.update(+id, updatePaymentDto);
+  @Post('/subscription/pix')
+  async monthlySubscription(@Request() request) {
+    let dto = {
+      userId: request.user.id,
+    } as CreateSubscriptionDto;
+    return this.paymentService.payWithPix(dto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.paymentService.remove(+id);
+  @Get('/subscription/pix/:id/capture')
+  async capturePix(@Param('id') id: string) {
+    return await this.paymentService.capturePix(id);
+  }
+
+  @Post('/pagseguro/pix/webhook')
+  Webhook(@Body() dto: any, @Request() request) {
+    if(dto && dto.charges){
+      return this.paymentService.processPix(dto);
+    }
   }
 }

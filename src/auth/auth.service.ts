@@ -18,7 +18,7 @@ export class AuthService {
 
   async validateUser(user: { email: string; password: string }): Promise<any> {
     let contractor = await this.contractorRepository.findOneBy({
-      email: user.email,
+      email: user.email?.toLocaleLowerCase(),
       password: user.password,
     });
 
@@ -35,7 +35,6 @@ export class AuthService {
 
   async validateFacebookUser(profile: any): Promise<any> {
     // Lógica para salvar o usuário no banco de dados, por exemplo
-    console.log(profile);
     return profile; // Retorna o perfil obtido do Facebook
   }
 }

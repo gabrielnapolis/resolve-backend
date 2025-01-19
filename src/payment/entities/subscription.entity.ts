@@ -13,6 +13,9 @@ export class Subscription {
     @Column()
     externalStatus: string
 
+    @Column()
+    nextInvoiceAt: Date
+
     @ManyToOne((type) => Plan)
     @JoinColumn()
     plan: Plan;
