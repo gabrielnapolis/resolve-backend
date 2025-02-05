@@ -90,6 +90,12 @@ export class Contractor {
   })
   subscriberId: string;
 
+  @Column({
+    nullable: true,
+  })
+  facebookId: string;
+
+
   @OneToMany(
     (type) => ContractorSpeciality,
     (speciality) => speciality.contractor,

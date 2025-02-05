@@ -57,8 +57,8 @@ export class ContractorService {
       .getMany();
   }
 
-  findOne(id: string) {
-    let contractor = this.contractorRepository
+  async findOne(id: string) {
+    let contractor = await this.contractorRepository
       .createQueryBuilder('contractor')
       .innerJoinAndSelect('contractor.specialities', 'speciliaties')
       .innerJoinAndSelect('speciliaties.speciality', 'speciality')

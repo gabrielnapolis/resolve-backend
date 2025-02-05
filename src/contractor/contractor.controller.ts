@@ -59,7 +59,7 @@ export class ContractorController {
   @Post('/search')
  async refinedSearch(@Body() args: any) {
     try {
-       let contractors =await this.contractorService.search(args);
+       let contractors = await this.contractorService.search(args);
        console.log(contractors)
        return contractors
     } catch (error) {
@@ -73,8 +73,8 @@ export class ContractorController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.contractorService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    return await this.contractorService.findOne(id);
   }
 
   @Put(':id')
