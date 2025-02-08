@@ -59,11 +59,13 @@ export class AuthController {
   @Get('facebook/callback')
   @UseGuards(FacebookAuthGuard)
   async facebookCallback(@Req() req,  @Res() res) {
-  
+
     let authenticatedUser = req.user; // O usuário retornado pela estratégia
+    
     if (!authenticatedUser) {
       const frontendUrl = process.env.FRONTEND_URL;
-      return res.redirect(`${frontendUrl}/auth/error?error=unauthorized`);
+      res.redirect(`${frontendUrl}/auth/error?error=unauthorized`);
+      return;
     }
 
     const token = jwt.sign(
@@ -81,7 +83,6 @@ export class AuthController {
   async googleLogin(): Promise<void> {}
 
   @Get('google/callback')
-  @UseGuards(GoogleAuthGuard)
   async googleCallback(@Req() req, @Res() res) {
     const user = req.user as { id: string; email: string; name: string };
 

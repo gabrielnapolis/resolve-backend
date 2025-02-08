@@ -78,4 +78,7 @@ export class SubscriptionRepository {
   async deactivatePlan(planId: string) {
     await this.planRepository.update(planId, { active: false });
   }
+  async deactivateSubscription(id: string) {
+    await this.subscriptionRepository.update(id, { active: false });
+  }
 }

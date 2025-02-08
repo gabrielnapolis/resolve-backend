@@ -145,8 +145,10 @@ export class PaymentService {
     if (!subscription)
       return { success: false, errors: ['subscription not found'] };
 
+
+    console.log('Canceling subscription: ', `${subscription.externalId} ${subscription.id}`);
     await this.paymentPlatform.cancelSubscription(subscription.externalId);
-    await this.subscriptionRepository.deactivatePlan(subscription.id);
+    await this.subscriptionRepository.deactivateSubscription(subscription.id);
     return { success: true, errors: [] };
   }
 
@@ -169,6 +171,7 @@ export class PaymentService {
       dto &&
       subscriptions &&
       subscriptions.length > 0 &&
+      dto.charges &&
       dto.charges.length > 0
     ) {
       let charge = dto.charges[0];
@@ -187,6 +190,7 @@ export class PaymentService {
       }
       
       if (charge.status == 'PAID') {
+        console.log('Pagamento confirmado', subs);
         subs.active = true;
         subs.externalStatus = 'ACTIVE';
         await this.subscriptionRepository.update(subs);
@@ -194,6 +198,18 @@ export class PaymentService {
 
       return subs;
     }
+
+    subscriptions = await this.subscriptionRepository.find({
+      where: {
+        externalId: dto.id,
+        externalStatus: 'ACTIVE',
+      },
+    } as FindManyOptions<Subscription>);
+
+    if(subscriptions && subscriptions.length > 0){
+      return subscriptions[0];
+    }
+
 
     return null;
   }

@@ -21,6 +21,8 @@ export class FacebookStrategy extends PassportStrategy(Strategy) {
   async validate(accessToken: string, refreshToken: string, profile: Profile) {
     const { emails, name, id } = profile;
     const email = emails?.[0]?.value;
+
+    console.log('profile: ', profile);
     if (!email) return null;
 
     let user = await this.contractorRepository.findOneBy({

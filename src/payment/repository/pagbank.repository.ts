@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PagBank } from '../dto/pagbank.subscription.dto';
+import { Console } from 'console';
 
 @Injectable()
 export class PagbankRepository {
   generateQrCode(pagbankData: PagBank.IPagBankPaymentType) {
     throw new Error('Method not implemented.');
   }
-  private URL_BASE = process.env.PAGSEGURO_SUBSCRIPTION
+  private URL_BASE = process.env.PAGSEGURO_SUBSCRIPTION;
   constructor() {}
 
   private headers = {
@@ -16,7 +17,10 @@ export class PagbankRepository {
   };
 
   async subscribe(paymentData: PagBank.SubscriptionDTO) {
-    console.log('\nEnviando dados para assinatura: ', JSON.stringify(paymentData))
+    console.log(
+      '\nEnviando dados para assinatura: ',
+      JSON.stringify(paymentData),
+    );
 
     const url = `${this.URL_BASE}/subscriptions`;
     const options = {
@@ -25,18 +29,20 @@ export class PagbankRepository {
       body: JSON.stringify(paymentData),
     };
 
-    let response = await fetch(url, options)
+    let response = await fetch(url, options);
     let data = await response.json();
 
-    console.log('\nResposta assinatura: ', JSON.stringify(data))
-    if(response.status == 201)
-      return data
+    console.log('\nResposta assinatura: ', JSON.stringify(data));
+    if (response.status == 201) return data;
 
     return null;
   }
-  
+
   async generatePixQrCode(paymentData: PagBank.PixDTO) {
-    console.log('\nEnviando dados para pagamento com pix: ', JSON.stringify(paymentData))
+    console.log(
+      '\nEnviando dados para pagamento com pix: ',
+      JSON.stringify(paymentData),
+    );
 
     const url = `${process.env.PAGSEGURO_PIX}/orders`;
     const options = {
@@ -45,16 +51,14 @@ export class PagbankRepository {
       body: JSON.stringify(paymentData),
     };
 
-    let response = await fetch(url, options)
+    let response = await fetch(url, options);
     let data = await response.text();
 
-    console.log('\nResposta pagamento com pix: ', data)
-    if(response.status == 201)
-      return JSON.parse(data);
+    console.log('\nResposta pagamento com pix: ', data);
+    if (response.status == 201) return JSON.parse(data);
 
     return null;
   }
-
 
   async cancelSubscription(subscriptionId: string) {
     const url = `${this.URL_BASE}/subscriptions/${subscriptionId}/cancel`;
@@ -70,7 +74,6 @@ export class PagbankRepository {
     if (response.status === 201) return response.json();
 
     return null;
-
   }
 
   async getPlanById(planId: string) {
@@ -83,8 +86,8 @@ export class PagbankRepository {
     };
 
     let response = await fetch(url, options);
-    console.log(response.status)
-    
+    console.log(response.status);
+
     if (response.status === 200) return response.json();
 
     return null;
@@ -100,9 +103,12 @@ export class PagbankRepository {
     };
 
     let response = await fetch(url, options);
-    
-    if (response.status === 200) return response.json();
 
+    if (response.status === 200) {
+      let data = await response.text();
+      console.log('Order response: ', data);
+      return JSON.parse(data);
+    }
     return null;
   }
 }
