@@ -2,9 +2,7 @@ import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common'
 import { ContractorService } from './contractor.service';
 import { CreateContractorDto } from './dto/create-contractor.dto';
 import { UpdateContractorDto } from './dto/update-contractor.dto';
-import { Speciality } from '../speciality/entities/speciality.entity';
 import { CreateContractorSpecialityDto } from './dto/create-contractor-speciality.dto';
-import { ContractorSpeciality } from './entities/contractorSpeciality.entity';
 
 @Controller('contractor')
 export class ContractorController {
@@ -15,6 +13,7 @@ export class ContractorController {
   try {
     let specialities = createContractorDto.specialities;
     delete createContractorDto.specialities;
+    createContractorDto.active = true;
     let contractor= await this.
         contractorService.create(createContractorDto);
   

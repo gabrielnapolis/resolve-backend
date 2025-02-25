@@ -11,7 +11,6 @@ import {
 import { AuthService } from './auth.service';
 import { GoogleAuthGuard } from './guard/google-auth.guard';
 import { SubscriptionRepository } from 'src/payment/repository/subscription.repository';
-import { AuthGuard } from '@nestjs/passport';
 import { FacebookAuthGuard } from './guard/facebook-auth.guard';
 import * as jwt from 'jsonwebtoken';
 

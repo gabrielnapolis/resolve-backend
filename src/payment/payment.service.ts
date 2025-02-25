@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PagbankRepository } from './repository/pagbank.repository';
-import { CreatePaymentDto } from './dto/create-payment.dto';
-import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { Subscription } from './entities/subscription.entity';
 import { SubscriptionResponseDTO } from './dto/payment-response.dto';
@@ -145,8 +143,10 @@ export class PaymentService {
     if (!subscription)
       return { success: false, errors: ['subscription not found'] };
 
-
-    console.log('Canceling subscription: ', `${subscription.externalId} ${subscription.id}`);
+    console.log(
+      'Canceling subscription: ',
+      `${subscription.externalId} ${subscription.id}`,
+    );
     await this.paymentPlatform.cancelSubscription(subscription.externalId);
     await this.subscriptionRepository.deactivateSubscription(subscription.id);
     return { success: true, errors: [] };
@@ -175,20 +175,20 @@ export class PaymentService {
       dto.charges.length > 0
     ) {
       let charge = dto.charges[0];
-      
-      let pending = ["IN_ANALYSIS", "AUTHORIZED", "WAITING"]
-      if (pending.includes(charge.status)){
+
+      let pending = ['IN_ANALYSIS', 'AUTHORIZED', 'WAITING'];
+      if (pending.includes(charge.status)) {
         return;
       }
 
       let subs = subscriptions[0];
-      let declined = ["DECLINED", "CANCELED"]
-      if (declined.includes(charge.status)){
+      let declined = ['DECLINED', 'CANCELED'];
+      if (declined.includes(charge.status)) {
         subs.active = false;
         subs.externalStatus = charge.status;
         await this.subscriptionRepository.update(subs);
       }
-      
+
       if (charge.status == 'PAID') {
         console.log('Pagamento confirmado', subs);
         subs.active = true;
@@ -206,10 +206,9 @@ export class PaymentService {
       },
     } as FindManyOptions<Subscription>);
 
-    if(subscriptions && subscriptions.length > 0){
+    if (subscriptions && subscriptions.length > 0) {
       return subscriptions[0];
     }
-
 
     return null;
   }
@@ -239,13 +238,32 @@ export class PaymentService {
     );
     if (!contractor) return { success: false, errors: ['User not found.'] };
 
-    const defaultPlanId = '1';
+    if (!contractor.subscriberId) {
+      let data = await this.paymentPlatform.findSubscriberByEmail(
+        contractor.email,
+      );
+
+      if (data.customers.length > 0) {
+        let subscriber = data.customers[0];
+        contractor.subscriberId = subscriber.id;
+        await this.subscriptionRepository.updateSubscriberId(
+          contractor,
+          subscriber.id,
+        );
+      }
+    }
+
+    ///==========================================================
+    /// TODO: configurar ID do plano padrão no banco
+    ///==========================================================
+    const defaultPlanId = this.subscriptionRepository.getDefaultPlan();
     let plan = await this.subscriptionRepository.getPlanById(defaultPlanId);
     if (!plan) return { success: false, errors: ['Plan not found.'] };
 
     const pagbankPlan = await this.paymentPlatform.getPlanById(
       plan.external_id,
     );
+
     if (!pagbankPlan || pagbankPlan.status != 'ACTIVE') {
       this.subscriptionRepository.deactivatePlan(plan?.id);
       return { success: false, errors: ['Plan not found.'] };

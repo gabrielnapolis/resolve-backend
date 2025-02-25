@@ -39,6 +39,10 @@ export class SubscriptionRepository {
     return await this.subscriptionRepository.find(whereClause);
   }
 
+  async getDefaultPlan(): Promise<Plan | null>  {
+    return await this.planRepository.findOne({});
+  }
+
   async findActiveSubscritionByContractor(
     contractor,
   ): Promise<Subscription | null> {
