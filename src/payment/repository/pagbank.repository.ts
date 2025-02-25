@@ -1,12 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PagBank } from '../dto/pagbank.subscription.dto';
-import { Console } from 'console';
 
 @Injectable()
 export class PagbankRepository {
-  generateQrCode(pagbankData: PagBank.IPagBankPaymentType) {
-    throw new Error('Method not implemented.');
-  }
   private URL_BASE = process.env.PAGSEGURO_SUBSCRIPTION;
   constructor() {}
 
@@ -109,6 +105,26 @@ export class PagbankRepository {
       console.log('Order response: ', data);
       return JSON.parse(data);
     }
+    return null;
+  }
+
+  async findSubscriberByEmail(email: string) {
+    console.log('\nObter subscriber por email: ', JSON.stringify(email));
+
+    let headers = { ...this.headers, q: email };
+
+    const url = `${this.URL_BASE}/customers`;
+    const options = {
+      method: 'GET',
+      headers: headers,
+    };
+
+    let response = await fetch(url, options);
+    let data = await response.text();
+
+    console.log('\nResposta Obter subscriber: ', data);
+    if (response.status == 200) return JSON.parse(data);
+
     return null;
   }
 }
