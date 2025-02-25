@@ -5,12 +5,15 @@ import {
   HttpCode,
   Post,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { GoogleAuthGuard } from './guard/google-auth.guard';
 import { SubscriptionRepository } from 'src/payment/repository/subscription.repository';
-
+import { AuthGuard } from '@nestjs/passport';
+import { FacebookAuthGuard } from './guard/facebook-auth.guard';
+import * as jwt from 'jsonwebtoken';
 
 @Controller('auth')
 export class AuthController {
@@ -28,7 +31,7 @@ export class AuthController {
 
       let subscription =
         await this.subscriptionRepository.findActiveSubscritionByContractor(
-          user.contractor
+          user.contractor,
         );
 
       let token = this.authService.generateToken({
@@ -47,22 +50,55 @@ export class AuthController {
     }
   }
 
+  @Get('facebook')
+  @UseGuards(FacebookAuthGuard)
+  async facebookLogin(): Promise<void> {
+    // Inicia o fluxo de login com o Facebook
+  }
+
+  @Get('facebook/callback')
+  @UseGuards(FacebookAuthGuard)
+  async facebookCallback(@Req() req,  @Res() res) {
+
+    let authenticatedUser = req.user; // O usuário retornado pela estratégia
+    
+    if (!authenticatedUser) {
+      const frontendUrl = process.env.FRONTEND_URL;
+      res.redirect(`${frontendUrl}/auth/error?error=unauthorized`);
+      return;
+    }
+
+    const token = jwt.sign(
+      { id: authenticatedUser.id, email: authenticatedUser.email, name: authenticatedUser.name },
+      process.env.JWT_SECRET!,
+      { expiresIn: '1h' },
+    );
+
+    const frontendUrl = process.env.FRONTEND_URL;
+    res.redirect(`${frontendUrl}/auth/success?token=${token}`);
+  }
+
   @Get('google')
-  @UseGuards(GoogleAuthGuard) // Inicia o processo de login com o Google
-  async googleAuth(@Req() req) {}
+  @UseGuards(GoogleAuthGuard)
+  async googleLogin(): Promise<void> {}
 
+  @Get('google/callback')
+  @UseGuards(GoogleAuthGuard)
+  async googleCallback(@Req() req, @Res() res) {
+    const user = req.user as { id: string; email: string; name: string };
+    
+    if (!user) {
+      const frontendUrl = process.env.FRONTEND_URL;
+      return res.redirect(`${frontendUrl}/auth/error?error=unauthorized`);
+    }
 
-   @Get('facebook')
+    const token = jwt.sign(
+      { id: user.id, email: user.email, name: user.name },
+      process.env.JWT_SECRET!,
+      { expiresIn: '1h' },
+    );
 
-   async facebookAuth() {
-     // O Guard vai automaticamente redirecionar para o Facebook para autenticação
-   }
- 
-   @Get('facebook/callback')
-
-   async facebookAuthRedirect() {
-     // Depois que o usuário for autenticado com sucesso, ele será redirecionado aqui
-     return 'Usuário autenticado com sucesso com o Facebook';
-   }
-
+    const frontendUrl = process.env.FRONTEND_URL;
+    res.redirect(`${frontendUrl}/auth/success?token=${token}`);
+  }
 }

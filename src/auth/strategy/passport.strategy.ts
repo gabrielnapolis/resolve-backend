@@ -23,9 +23,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       active: true
     })
 
-    console.log('payload', payload)
-    console.log('user', user)
-
     if(!user) return false;
 
     return payload;

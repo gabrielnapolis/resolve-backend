@@ -1,109 +1,175 @@
 import { Contractor } from 'src/contractor/entities/contractor.entity';
 import { CreateSubscriptionDto } from './create-subscription.dto';
+import { Plan } from '../entities/plan.entity';
 
-export default class PagbankSubscriptionDTO {
-  constructor() {}
-
-  plan: { id: string };
-  customer: CustomerPayload;
-  pro_rata: boolean = false;
-  payment_method: PaymentMethod[];
-  amount: Amount;
-
-  setSubscriberId(id: string) {
-    this.customer = {
-      id: id,
-    };
+export namespace PagBank {
+  export enum PaymentType {
+    Pix,
+    Subscription,
   }
 
-  setAmount(amount: number) {
-    this.amount = {
-      currency: 'BRL',
-      value: amount,
-    };
+  export interface IPagBankPaymentType {
+    setAmount(amount: number): void;
+    setSubscriberId(id: string): void;
   }
 
-  static build(
-    planId: string,
-    contractor: Contractor,
-    dto: CreateSubscriptionDto,
-  ): PagbankSubscriptionDTO {
-    let pag = new PagbankSubscriptionDTO();
-    pag.plan = { id: planId };
-    pag.customer = {
-      name: contractor.fullname,
-      email: contractor.email,
-      tax_id: dto.cpf.replace(/\D/g, ''),
-      phones: [
+  export class SubscriptionDTO implements IPagBankPaymentType {
+    plan: { id: string };
+    customer: CustomerPayload;
+    pro_rata: boolean = false;
+    payment_method: PaymentMethod[];
+    amount: Amount;
+
+    constructor(
+      contractor: Contractor,
+      dto: CreateSubscriptionDto,
+      planId: string,
+    ) {
+      this.plan = { id: planId };
+      this.customer = {
+        name: contractor.fullname,
+        email: contractor.email,
+        tax_id: dto.cpf.replace(/\D/g, ''),
+        phones: [
+          {
+            country: '55',
+            area: contractor.fone.substring(0, 2),
+            number: contractor.fone.substring(2, contractor.fone.length),
+          },
+        ],
+        billing_info: [
+          {
+            type: PAYMENT_TYPE.CreditCard,
+            card: {
+              encrypted: dto.card,
+            },
+          },
+        ],
+      };
+
+      this.amount = {
+        currency: 'BRL',
+        value: 0,
+      };
+
+      this.payment_method = [
         {
-          country: '55',
-          area: contractor.fone.substring(0, 2),
-          number: contractor.fone.substring(2, contractor.fone.length),
+          type: PAYMENT_TYPE.CreditCard,
+          card: {
+            encrypted: dto.card,
+            security_code: dto.cvv,
+          },
         },
-      ],
-      billing_info: [{
-        type: PAYMENT_TYPE.CreditCard,
-        card: {
-          encrypted: dto.card
+      ];
+      this.pro_rata = false;
+    }
+
+    setSubscriberId(id: string) {
+      this.customer = {
+        id: id,
+      };
+    }
+
+    setAmount(amount: number) {
+      this.amount = {
+        currency: 'BRL',
+        value: amount,
+      };
+    }
+  }
+
+  export class PixDTO  implements IPagBankPaymentType {
+    customer: CustomerPayload;
+    qr_codes: { amount: Amount }[];
+    notification_urls: string[];
+    items: Item[];
+    private description: string;
+
+    constructor(
+      description: string,
+      contractor: Contractor,
+    ){
+
+      this.customer = {
+        name: contractor.fullname,
+        email: contractor.email,
+        tax_id: contractor.cpf.replace(/\D/g, ''),
+        phones: [
+          {
+            country: '55',
+            area: contractor.fone.substring(0, 2),
+            number: contractor.fone.substring(2, contractor.fone.length),
+            type: 'MOBILE'
+          },
+        ],
+      };
+
+      this.notification_urls = ['https://webhook.site/6deea5cb-90a9-49d1-a94e-67288d7b0ed7']
+      this.description = description;
+    }
+
+    setAmount(amount: number): void {
+      this.qr_codes = [{
+        amount: { value: amount }
+      }];
+
+      this.items = [
+        {
+          name: this.description,
+          unit_amount: amount,
+          quantity: 1
         }
-      }]
-    };
+      ]
+    }
 
-    pag.amount = {
-      currency: 'BRL',
-      value: 0,
-    };
+    setSubscriberId(id: string): void { }
+  };
 
-    pag.payment_method = [
+  type CustomerPayload = {
+    id?: string;
+    name?: string;
+    email?: string;
+    tax_id?: string; //cpf-cnpj
+    phones?: PaymentPhone[];
+    billing_info?: [
       {
-        type: PAYMENT_TYPE.CreditCard,
         card: {
-          encrypted: dto.card,
-          security_code: dto.cvv
-        },
+          encrypted: string;
+        };
+        type: string;
       },
     ];
-    pag.pro_rata = false;
-    return pag;
-  }
-}
-
-export type CustomerPayload = {
-  id?: string;
-  name?: string;
-  email?: string;
-  tax_id?: string; //cpf-cnpj
-  phones?: PaymentPhone[];
-  billing_info?: [
-    {
-      card: {
-        encrypted: string;
-      };
-      type: string;
-    },
-  ];
-};
-
-export interface PaymentMethod {
-  type: PAYMENT_TYPE;
-  card: {
-    encrypted: string;
-    security_code: string
   };
-}
 
-export interface PaymentPhone {
-  country: string;
-  area: string;
-  number: string;
-}
+  type PaymentMethod = {
+    type: PAYMENT_TYPE;
+    card: {
+      encrypted: string;
+      security_code: string;
+    };
+  };
 
-export enum PAYMENT_TYPE {
-  CreditCard = 'CREDIT_CARD',
-  Boleto = 'BOLETO',
-}
+  type PaymentPhone = {
+    country: string;
+    area: string;
+    number: string;
+    type?: string;
+  };
 
-export type Amount = {
-  value: number;
-  currency: string;
-};
+  type Amount = {
+    value: number;
+    currency?: string;
+  };
+
+  type Item = {
+    name: string;
+    quantity: number;
+    unit_amount: number;
+  };
+
+  enum PAYMENT_TYPE {
+    CreditCard = 'CREDIT_CARD',
+    Boleto = 'BOLETO',
+  };
+
+}
