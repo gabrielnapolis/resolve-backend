@@ -85,8 +85,9 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
   async googleCallback(@Req() req, @Res() res) {
+    console.log(" google callback",req);
     const user = req.user as { id: string; email: string; name: string };
-    
+    console.log(" google callback",user);
     if (!user) {
       const frontendUrl = process.env.FRONTEND_URL;
       return res.redirect(`${frontendUrl}/auth/error?error=unauthorized`);
