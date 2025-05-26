@@ -250,13 +250,15 @@ export class PaymentService {
           contractor,
           subscriber.id,
         );
+      }else{
+        console.error('Subscriber not found');
       }
     }
 
     ///==========================================================
     /// TODO: configurar ID do plano padrão no banco
     ///==========================================================
-    const defaultPlanId = this.subscriptionRepository.getDefaultPlan();
+    const defaultPlanId = (await this.subscriptionRepository.getDefaultPlan()).id;
     let plan = await this.subscriptionRepository.getPlanById(defaultPlanId);
     if (!plan) return { success: false, errors: ['Plan not found.'] };
 
