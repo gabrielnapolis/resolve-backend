@@ -11,7 +11,7 @@ import { AuthService } from 'src/auth/auth.service';
 @Module({
   controllers: [PaymentController],
   providers: [
-AuthService,
+    AuthService,
     PaymentService, 
     PagbankRepository, 
     SubscriptionRepository, 
