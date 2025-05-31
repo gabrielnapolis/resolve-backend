@@ -12,6 +12,7 @@ import { JwtAuthGuard } from './guard/passport-auth.guard';
 import { PaymentModule } from 'src/payment/payment.module';
 import { FacebookStrategy } from './strategy/facebook.strategy';
 import { GoogleStrategy } from './strategy/google.strategy';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -34,6 +35,10 @@ import { GoogleStrategy } from './strategy/google.strategy';
   ],
   controllers: [AuthController],
   providers: [
+      {
+    provide: APP_GUARD,
+    useClass: JwtAuthGuard ,
+  },
     AuthService,
     JwtAuthGuard,
     JwtStrategy,

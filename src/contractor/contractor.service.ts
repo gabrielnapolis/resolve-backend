@@ -87,6 +87,17 @@ export class ContractorService {
       console.log(error);
     }
   }
+    async removeContractorSpeciliaty(
+    createContractorSpecilityDto: CreateContractorSpecialityDto,
+  ) {
+    try {
+      return await this.contractorSpeciliatyRepository.save(
+        createContractorSpecilityDto,
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
   
   async searchContractorBySpeciliaty(specialityId: string) {
     let contractors = await this.contractorSpeciliatyRepository

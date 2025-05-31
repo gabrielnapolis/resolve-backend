@@ -16,5 +16,6 @@ import { PaymentModule } from './payment/payment.module';
   imports: [ContractorModule, ClientModule, SharedModule, AuthModule, DatabaseModule, SpecialityModule, RegionsModule, NeighborhoodModule, ReviewModule, PaymentModule],
   controllers: [AppController],
   providers: [AppService],
+  exports:[AuthModule]
 })
 export class AppModule {}

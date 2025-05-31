@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Contractor } from 'src/contractor/entities/contractor.entity';
 import { Repository } from 'typeorm';
@@ -37,4 +37,19 @@ export class AuthService {
     // Lógica para salvar o usuário no banco de dados, por exemplo
     return profile; // Retorna o perfil obtido do Facebook
   }
+  async verifyAsync(token:any): Promise<any> {
+ try {
+      const payload = await this.jwtService.verifyAsync(
+        token,
+        {
+          secret:  process.env.secret
+        }
+      );
+      // 💡 We're assigning the payload to the request object here
+      // so that we can access it in our route handlers
+       return  payload;
+    } catch {
+      throw new UnauthorizedException();
+    }
+}
 }
