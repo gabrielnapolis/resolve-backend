@@ -21,6 +21,10 @@ export class RatingsController {
   findOne(@Param('id') id: string) {
     return this.ratingsService.findOne(id);
   }
+  @Get('/contractor/:id')
+  findByContracotr(@Param('id') id: string) {
+    return this.ratingsService.findByContractorId(id);
+  }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateRatingDto: UpdateRatingDto) {

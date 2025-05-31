@@ -17,6 +17,10 @@ export class RatingsService {
     return await this.ratingRepository.save(rating);
   }
 
+  async findByContractorId(contractorId: string): Promise<Rating[]> {
+    return await this.ratingRepository.findBy({ contractor: { id: contractorId } });
+  }
+
   async findAll(): Promise<Rating[]> {
     return await this.ratingRepository.find();
   }
