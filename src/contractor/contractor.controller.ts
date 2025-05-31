@@ -42,8 +42,8 @@ export class ContractorController {
   }
 
   @Delete('/speciality')
-  removeContractorSpeciality(@Body() createContractorSpecialityDto: CreateContractorSpecialityDto) {
-    return this.contractorService.addContractorSpeciliaty(createContractorSpecialityDto);
+  removeContractorSpeciality(@Body() id:string) {
+    return this.contractorService.removeContractorSpeciliaty(id);
   }
 
   @Post('/search/specility')

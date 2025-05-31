@@ -6,11 +6,12 @@ import { PagbankRepository } from './repository/pagbank.repository';
 import { SubscriptionRepository } from './repository/subscription.repository';
 import { DatabaseModule } from 'src/database/database.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { AuthService } from 'src/auth/auth.service';
 
 @Module({
   controllers: [PaymentController],
   providers: [
-
+AuthService,
     PaymentService, 
     PagbankRepository, 
     SubscriptionRepository, 

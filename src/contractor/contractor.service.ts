@@ -88,12 +88,10 @@ export class ContractorService {
     }
   }
     async removeContractorSpeciliaty(
-    createContractorSpecilityDto: CreateContractorSpecialityDto,
+    id: string,
   ) {
     try {
-      return await this.contractorSpeciliatyRepository.save(
-        createContractorSpecilityDto,
-      );
+      return await this.contractorSpeciliatyRepository.delete({id: id});
     } catch (error) {
       console.log(error);
     }

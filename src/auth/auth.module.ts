@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 
@@ -13,10 +13,10 @@ import { PaymentModule } from 'src/payment/payment.module';
 import { FacebookStrategy } from './strategy/facebook.strategy';
 import { GoogleStrategy } from './strategy/google.strategy';
 import { APP_GUARD } from '@nestjs/core';
-
 @Module({
   imports: [
     JwtModule.registerAsync({
+      global: true,
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get('JWT_SECRET'),
@@ -35,10 +35,7 @@ import { APP_GUARD } from '@nestjs/core';
   ],
   controllers: [AuthController],
   providers: [
-      {
-    provide: APP_GUARD,
-    useClass: JwtAuthGuard ,
-  },
+    
     AuthService,
     JwtAuthGuard,
     JwtStrategy,
@@ -46,5 +43,6 @@ import { APP_GUARD } from '@nestjs/core';
     GoogleStrategy,
     ...authProviders,
   ],
+  exports: [AuthService, JwtModule, JwtAuthGuard, PassportModule, JwtStrategy, FacebookStrategy, GoogleStrategy],
 })
 export class AuthModule {}
