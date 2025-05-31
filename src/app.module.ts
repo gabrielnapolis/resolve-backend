@@ -11,9 +11,10 @@ import { RegionsModule } from './regions/regions.module';
 import { NeighborhoodModule } from './neighborhood/neighborhood.module';
 import { ReviewModule } from './review/review.module';
 import { PaymentModule } from './payment/payment.module';
+import { RatingsModule } from './ratings/ratings.module';
 
 @Module({
-  imports: [ContractorModule, ClientModule, SharedModule, AuthModule, DatabaseModule, SpecialityModule, RegionsModule, NeighborhoodModule, ReviewModule, PaymentModule],
+  imports: [ContractorModule, ClientModule, SharedModule, AuthModule, DatabaseModule, SpecialityModule, RegionsModule, NeighborhoodModule, ReviewModule, PaymentModule, RatingsModule],
   controllers: [AppController],
   providers: [AppService],
   exports:[AuthModule]

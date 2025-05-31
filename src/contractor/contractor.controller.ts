@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, UseGuards } from '@nestjs/common';
 import { ContractorService } from './contractor.service';
 import { CreateContractorDto } from './dto/create-contractor.dto';
 import { UpdateContractorDto } from './dto/update-contractor.dto';
 import { CreateContractorSpecialityDto } from './dto/create-contractor-speciality.dto';
+import { JwtAuthGuard } from 'src/auth/guard/passport-auth.guard';
 
 @Controller('contractor')
 export class ContractorController {
@@ -75,12 +76,14 @@ export class ContractorController {
   async findOne(@Param('id') id: string) {
     return await this.contractorService.findOne(id);
   }
-
+  
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   update(@Param('id') id: string, @Body() updateContractorDto: UpdateContractorDto) {
     return this.contractorService.update(id, updateContractorDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.contractorService.remove(id);
