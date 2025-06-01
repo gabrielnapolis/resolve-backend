@@ -4,10 +4,13 @@ import { CreateContractorDto } from './dto/create-contractor.dto';
 import { UpdateContractorDto } from './dto/update-contractor.dto';
 import { CreateContractorSpecialityDto } from './dto/create-contractor-speciality.dto';
 import { JwtAuthGuard } from 'src/auth/guard/passport-auth.guard';
+import { EmailService } from 'src/shared/email.service';
 
 @Controller('contractor')
 export class ContractorController {
-  constructor(private readonly contractorService: ContractorService) { }
+  constructor(private readonly contractorService: ContractorService,
+    private readonly emailService: EmailService
+  ) { }
 
   @Post()
   async create(@Body() createContractorDto: CreateContractorDto) {
@@ -87,5 +90,35 @@ export class ContractorController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.contractorService.remove(id);
+  }
+
+  @Post('/password')
+  async changePassword(@Body() args: { id: string; password: string }) {
+    try {
+      return await this.contractorService.changePassword(args.id, args.password);
+    } catch (error) {
+      return error;
+    }
+  }
+
+  @Post('/password')
+  async resetPassword(@Body() args: { id: string }) {
+      const char =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_-+=";
+    let password = "";
+    for (let i = 0; i < length; i++) {
+        const ind = Math.floor(Math.random() * char.length);
+        password += char[ind];
+    }
+    try {
+      this.emailService.sendEmail(
+        args.id,
+        'Redefinição de Senha',
+        `Sua nova senha é: ${password}`,
+      );
+      return await this.contractorService.changePassword(args.id, password);
+    } catch (error) {
+      return error;
+    }
   }
 }

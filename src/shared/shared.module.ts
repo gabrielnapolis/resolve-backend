@@ -1,4 +1,12 @@
 import { Module } from '@nestjs/common';
+import { EmailService } from './email.service';
+import { DatabaseModule } from 'src/database/database.module';
 
-@Module({})
-export class SharedModule {}
+@Module({  
+  providers: [EmailService],
+  imports:[DatabaseModule],
+  exports: [EmailService]
+})
+export class SharedModule {
+    
+}

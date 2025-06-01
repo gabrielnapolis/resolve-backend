@@ -72,6 +72,9 @@ export class ContractorService {
     return this.contractorRepository.update({ id: id }, updateContractorDto);
   }
 
+  changePassword(id: string, password: string) {
+    return this.contractorRepository.update({ id: id },{password: password});
+  }
   remove(id: string) {
     return this.contractorRepository.delete({ id: id });
   }
