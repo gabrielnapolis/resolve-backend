@@ -1,8 +1,9 @@
 
+import { User } from "src/user/user.entity"
 import { PrimaryGeneratedColumn, Column, Entity,} from "typeorm"
 
 @Entity()
-export class Client {
+export class Client extends User {
     
     @PrimaryGeneratedColumn()
     id:string

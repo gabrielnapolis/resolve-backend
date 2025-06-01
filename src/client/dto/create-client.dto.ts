@@ -1,3 +1,5 @@
+import { UserType } from "src/user/user.entity"
+
 export class CreateClientDto {
 
     fullname:string
@@ -13,4 +15,6 @@ export class CreateClientDto {
     state?: string
 
     city?:string
+    type: UserType= UserType.CLIENT;
+    login: string ;
 }

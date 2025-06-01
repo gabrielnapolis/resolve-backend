@@ -14,25 +14,26 @@ export class ContractorController {
 
   @Post()
   async create(@Body() createContractorDto: CreateContractorDto) {
-  try {
-    let specialities = createContractorDto.specialities;
-    delete createContractorDto.specialities;
-    createContractorDto.active = true;
-    let contractor= await this.
+    try {
+      let specialities = createContractorDto.specialities;
+      delete createContractorDto.specialities;
+      createContractorDto.active = true;
+      createContractorDto.login = createContractorDto.email;
+      let contractor = await this.
         contractorService.create(createContractorDto);
-  
-        specialities.forEach(async spec=>{
-          let contractorSpeciality:CreateContractorSpecialityDto={
-            speciality:spec,
-            contractor:contractor
-          }
-          let specSaved = await this.contractorService.addContractorSpeciliaty(contractorSpeciality)
-          console.log(specSaved)
-        })
-        return contractor
-  } catch (error) {
-    return error
-  }
+
+      specialities.forEach(async spec => {
+        let contractorSpeciality: CreateContractorSpecialityDto = {
+          speciality: spec,
+          contractor: contractor
+        }
+        let specSaved = await this.contractorService.addContractorSpeciliaty(contractorSpeciality)
+        console.log(specSaved)
+      })
+      return contractor
+    } catch (error) {
+      return error
+    }
   }
 
   @Post('/speciality')
@@ -45,26 +46,27 @@ export class ContractorController {
 
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete('/speciality')
-  removeContractorSpeciality(@Body() id:string) {
+  removeContractorSpeciality(@Body() id: string) {
     return this.contractorService.removeContractorSpeciliaty(id);
   }
 
   @Post('/search/specility')
   searchBySpeciality(@Body() args: any) {
-   try {
-     return this.contractorService.search(args);
-   } catch (error) {
-    return error
-   }
+    try {
+      return this.contractorService.search(args);
+    } catch (error) {
+      return error
+    }
   }
 
   @Post('/search')
- async refinedSearch(@Body() args: any) {
+  async refinedSearch(@Body() args: any) {
     try {
-       let contractors = await this.contractorService.search(args);
-       console.log(contractors)
-       return contractors
+      let contractors = await this.contractorService.search(args);
+      console.log(contractors)
+      return contractors
     } catch (error) {
       return error
     }
@@ -79,7 +81,7 @@ export class ContractorController {
   async findOne(@Param('id') id: string) {
     return await this.contractorService.findOne(id);
   }
-  
+
   @UseGuards(JwtAuthGuard)
   @Put(':id')
   update(@Param('id') id: string, @Body() updateContractorDto: UpdateContractorDto) {
@@ -103,12 +105,12 @@ export class ContractorController {
 
   @Post('/password')
   async resetPassword(@Body() args: { id: string }) {
-      const char =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_-+=";
+    const char =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_-+=";
     let password = "";
     for (let i = 0; i < length; i++) {
-        const ind = Math.floor(Math.random() * char.length);
-        password += char[ind];
+      const ind = Math.floor(Math.random() * char.length);
+      password += char[ind];
     }
     try {
       this.emailService.sendEmail(

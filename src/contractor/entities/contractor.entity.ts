@@ -1,7 +1,8 @@
 import { PrimaryGeneratedColumn, Column, OneToMany, Entity } from 'typeorm';
 import { ContractorSpeciality } from './contractorSpeciality.entity';
+import { User } from 'src/user/user.entity';
 @Entity()
-export class Contractor {
+export class Contractor extends User {
 
   @PrimaryGeneratedColumn()
   id: string;

@@ -12,8 +12,10 @@ import { NeighborhoodModule } from './neighborhood/neighborhood.module';
 import { ReviewModule } from './review/review.module';
 import { PaymentModule } from './payment/payment.module';
 import { JwtService } from '@nestjs/jwt';
+import { UserModule } from './user/user.module';
+import { AdminModule } from './admin/admin.module';
 @Module({
-  imports: [ContractorModule, ClientModule, SharedModule, AuthModule, DatabaseModule, SpecialityModule, RegionsModule, NeighborhoodModule, ReviewModule, PaymentModule],
+  imports: [ContractorModule, ClientModule, SharedModule, AuthModule, DatabaseModule, SpecialityModule, RegionsModule, NeighborhoodModule, ReviewModule, PaymentModule, UserModule, AdminModule],
   controllers: [AppController],
   providers: [AppService],
   exports:[AuthModule,SharedModule]

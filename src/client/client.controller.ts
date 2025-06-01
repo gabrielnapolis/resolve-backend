@@ -17,6 +17,7 @@ export class ClientController {
 
   @Post()
   create(@Body() createClientDto: CreateClientDto) {
+    createClientDto.login = createClientDto.email;
     try {
       return this.clientService.create(createClientDto);
     } catch (error) {
