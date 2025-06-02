@@ -30,6 +30,8 @@ export class ContractorService {
       .createQueryBuilder('contractor')
       .innerJoinAndSelect('contractor.specialities', 'speciliaties')
       .innerJoinAndSelect('speciliaties.speciality', 'speciality')
+      .select(['contractor.fullname', 'contractor.region', 'contractor.city','contractor.description','contractor.specialities'])
+      .where('contractor.active = true') 
       .where('speciality.id = :id', { id: args.speciality })
       .getMany();
     console.log(contractors);
