@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAdminDto } from './dto/create-admin.dto';
@@ -8,8 +8,9 @@ import { Admin } from './entities/admin.entity';
 @Injectable()
 export class AdminService {
   constructor(
-    @InjectRepository(Admin)
-    private adminRepository: Repository<Admin>,
+       @Inject('ADMIN_REPOSITORY')
+       private adminRepository: Repository<Admin>,
+
   ) {}
 
   async create(createAdminDto: CreateAdminDto): Promise<Admin> {
