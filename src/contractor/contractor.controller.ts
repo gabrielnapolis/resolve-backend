@@ -5,6 +5,7 @@ import { UpdateContractorDto } from './dto/update-contractor.dto';
 import { CreateContractorSpecialityDto } from './dto/create-contractor-speciality.dto';
 import { JwtAuthGuard } from 'src/auth/guard/passport-auth.guard';
 import { EmailService } from 'src/shared/email.service';
+import { UserType } from 'src/user/user.entity';
 
 @Controller('contractor')
 export class ContractorController {
@@ -18,6 +19,7 @@ export class ContractorController {
       let specialities = createContractorDto.specialities;
       delete createContractorDto.specialities;
       createContractorDto.active = true;
+      createContractorDto.type=UserType.CONTRACTOR;
       createContractorDto.login = createContractorDto.email;
       let contractor = await this.
         contractorService.create(createContractorDto);

@@ -1,12 +1,19 @@
-import { User } from "src/user/user.entity";
-import { PrimaryGeneratedColumn, Column, Entity,} from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-export class Admin extends User{
+@Entity()
+export class Admin {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id:string
+  @Column()
+  username: string;
 
-    @Column()
-    fullname:string
+  @Column()
+  email: string;
+
+  @Column()
+  password: string;
+
+  @Column({ default: true })
+  isActive: boolean;
 }
- 
