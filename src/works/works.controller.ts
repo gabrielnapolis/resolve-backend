@@ -19,12 +19,12 @@ export class WorksController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.worksService.findOne(+id);
+    return this.worksService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateWorkDto: UpdateWorkDto) {
-    return this.worksService.update(+id, updateWorkDto);
+    return this.worksService.update(id, updateWorkDto);
   }
 
   @Delete(':id')
