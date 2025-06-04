@@ -7,6 +7,7 @@ import { Speciality } from '../speciality/entities/speciality.entity';
 import { ContractorSpeciality } from 'src/contractor/entities/contractorSpeciality.entity';
 import { Subscription } from 'src/payment/entities/subscription.entity';
 import { Plan } from 'src/payment/entities/plan.entity';
+import { Work } from 'src/works/entities/work.entity';
 
 export const databaseProviders = [
   {
@@ -25,7 +26,8 @@ export const databaseProviders = [
          ContractorSpeciality,
          Speciality,
          Plan,
-         Subscription
+         Subscription,
+         Work
         ],
         synchronize: true,
       });

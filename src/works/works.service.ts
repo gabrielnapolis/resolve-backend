@@ -1,9 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateWorkDto } from './dto/create-work.dto';
 import { UpdateWorkDto } from './dto/update-work.dto';
+import { Repository } from 'typeorm';
+import { Work } from './entities/work.entity';
 
 @Injectable()
 export class WorksService {
+
+    constructor(
+          @Inject('WORK_REPOSITORY')
+      private workRepository: Repository<Work>,
+  
+    ) {}
   create(createWorkDto: CreateWorkDto) {
     return 'This action adds a new work';
   }
