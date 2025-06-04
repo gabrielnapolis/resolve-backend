@@ -6,29 +6,30 @@ import { Work } from './entities/work.entity';
 
 @Injectable()
 export class WorksService {
+  constructor(
+    @Inject('WORK_REPOSITORY')
+    private workRepository: Repository<Work>,
+  ) {}
 
-    constructor(
-          @Inject('WORK_REPOSITORY')
-      private workRepository: Repository<Work>,
-  
-    ) {}
-  create(createWorkDto: CreateWorkDto) {
-    return 'This action adds a new work';
+  async create(createWorkDto: CreateWorkDto): Promise<Work> {
+    const work = this.workRepository.create(createWorkDto);
+    return await this.workRepository.save(work);
   }
 
-  findAll() {
-    return `This action returns all works`;
+  async findAll(): Promise<Work[]> {
+    return await this.workRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} work`;
+  async findOne(id: string): Promise<Work> {
+    return await this.workRepository.findOneBy({ id });
   }
 
-  update(id: number, updateWorkDto: UpdateWorkDto) {
-    return `This action updates a #${id} work`;
+  async update(id: string, updateWorkDto: UpdateWorkDto): Promise<Work> {
+    await this.workRepository.update(id, updateWorkDto);
+    return this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} work`;
+  async remove(id: number): Promise<void> {
+    await this.workRepository.delete(id);
   }
 }
