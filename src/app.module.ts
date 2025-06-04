@@ -14,8 +14,9 @@ import { PaymentModule } from './payment/payment.module';
 import { JwtService } from '@nestjs/jwt';
 import { UserModule } from './user/user.module';
 import { AdminModule } from './admin/admin.module';
+import { PhotosModule } from './photos/photos.module';
 @Module({
-  imports: [ContractorModule, ClientModule, SharedModule, AuthModule, DatabaseModule, SpecialityModule, RegionsModule, NeighborhoodModule, ReviewModule, PaymentModule, UserModule, AdminModule],
+  imports: [ContractorModule, ClientModule, SharedModule, AuthModule, DatabaseModule, SpecialityModule, RegionsModule, NeighborhoodModule, ReviewModule, PaymentModule, UserModule, AdminModule, PhotosModule],
   controllers: [AppController],
   providers: [AppService],
   exports:[AuthModule,SharedModule]

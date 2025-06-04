@@ -1,6 +1,6 @@
 import * as nodemailer from "nodemailer";
 
-export class EmailService {
+export class ImgUploadService {
 transporter: any;
 
 constructor() {
