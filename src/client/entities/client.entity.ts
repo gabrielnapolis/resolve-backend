@@ -1,6 +1,7 @@
 
 import { User } from "src/user/user.entity"
-import { PrimaryGeneratedColumn, Column, Entity,} from "typeorm"
+import { Work } from "src/works/entities/work.entity"
+import { PrimaryGeneratedColumn, Column, Entity, OneToMany,} from "typeorm"
 
 @Entity()
 export class Client extends User {
@@ -43,4 +44,10 @@ export class Client extends User {
         nullable: true,
     })
     city?:string
+    
+    @OneToMany(
+        (type) => Work,
+        (work) => work.client,
+    )
+    works?: Work[];
 }

@@ -15,8 +15,9 @@ import { JwtService } from '@nestjs/jwt';
 import { UserModule } from './user/user.module';
 import { AdminModule } from './admin/admin.module';
 import { PhotosModule } from './photos/photos.module';
+import { WorksModule } from './works/works.module';
 @Module({
-  imports: [ContractorModule, ClientModule, SharedModule, AuthModule, DatabaseModule, SpecialityModule, RegionsModule, NeighborhoodModule, ReviewModule, PaymentModule, UserModule, AdminModule, PhotosModule],
+  imports: [ContractorModule, ClientModule, SharedModule, AuthModule, DatabaseModule, SpecialityModule, RegionsModule, NeighborhoodModule, ReviewModule, PaymentModule, UserModule, AdminModule, PhotosModule, WorksModule],
   controllers: [AppController],
   providers: [AppService],
   exports:[AuthModule,SharedModule]
