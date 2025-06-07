@@ -1,25 +1,31 @@
-import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class Plan {
-    @PrimaryGeneratedColumn()
-    id:string
+  @PrimaryGeneratedColumn()
+  id: string;
 
-    @Column()
-    external_id:string
+  @Column()
+  external_id: string;
 
-    @Column()
-    price:number
-    
-    @Column()
-    active:boolean
+  @Column()
+  price: number;
 
-    @Column()
-    description: string
+  @Column()
+  active: boolean;
 
-    @CreateDateColumn()
-    createdAt:Date
+  @Column()
+  description: string;
 
-    @UpdateDateColumn()
-    updatedAt:Date
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

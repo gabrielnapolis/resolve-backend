@@ -6,7 +6,8 @@ import { Contractor } from 'src/contractor/entities/contractor.entity';
 export const paymentProviders = [
   {
     provide: 'SUBSCRIPTION_REPOSITORY',
-    useFactory: (dataSource: DataSource) => dataSource.getRepository(Subscription),
+    useFactory: (dataSource: DataSource) =>
+      dataSource.getRepository(Subscription),
     inject: ['DATA_SOURCE'],
   },
   {
@@ -16,7 +17,8 @@ export const paymentProviders = [
   },
   {
     provide: 'CONTRACTOR_REPOSITORY',
-    useFactory: (dataSource: DataSource) => dataSource.getRepository(Contractor),
+    useFactory: (dataSource: DataSource) =>
+      dataSource.getRepository(Contractor),
     inject: ['DATA_SOURCE'],
   },
 ];

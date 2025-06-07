@@ -1,9 +1,9 @@
 import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
 @Entity()
 export class Speciality {
-    @PrimaryGeneratedColumn()
-    id:string
+  @PrimaryGeneratedColumn()
+  id: string;
 
-    @Column()
-    fullname:string
+  @Column()
+  fullname: string;
 }

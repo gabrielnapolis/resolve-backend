@@ -28,6 +28,6 @@ export class CreateSubscriptionDto {
   @IsNotEmpty()
   @IsString()
   month: string;
-  
+
   userId: string;
 }

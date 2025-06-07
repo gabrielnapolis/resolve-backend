@@ -1,7 +1,7 @@
 type ResponseDTO = {
-    success: boolean, 
-    data?: any,
-    errors?: string[]
-}
+  success: boolean;
+  data?: any;
+  errors?: string[];
+};
 
-export interface SubscriptionResponseDTO extends ResponseDTO  { }
+export interface SubscriptionResponseDTO extends ResponseDTO {}

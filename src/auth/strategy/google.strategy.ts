@@ -7,8 +7,9 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(
-      @Inject('CONTRACTOR_REPOSITORY')
-      private readonly contractorRepository: Repository<Contractor>) {
+    @Inject('CONTRACTOR_REPOSITORY')
+    private readonly contractorRepository: Repository<Contractor>,
+  ) {
     super({
       clientID: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,

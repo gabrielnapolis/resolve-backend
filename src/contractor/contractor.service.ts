@@ -30,8 +30,14 @@ export class ContractorService {
       .createQueryBuilder('contractor')
       .innerJoinAndSelect('contractor.specialities', 'speciliaties')
       .innerJoinAndSelect('speciliaties.speciality', 'speciality')
-      .select(['contractor.fullname', 'contractor.region', 'contractor.city','contractor.description','contractor.specialities'])
-      .where('contractor.active = true') 
+      .select([
+        'contractor.fullname',
+        'contractor.region',
+        'contractor.city',
+        'contractor.description',
+        'contractor.specialities',
+      ])
+      .where('contractor.active = true')
       .where('speciality.id = :id', { id: args.speciality })
       .getMany();
     console.log(contractors);
@@ -75,12 +81,12 @@ export class ContractorService {
   }
 
   changePassword(id: string, password: string) {
-    return this.contractorRepository.update({ id: id },{password: password});
+    return this.contractorRepository.update({ id: id }, { password: password });
   }
   remove(id: string) {
     return this.contractorRepository.delete({ id: id });
   }
-  
+
   async addContractorSpeciliaty(
     createContractorSpecilityDto: CreateContractorSpecialityDto,
   ) {
@@ -92,16 +98,14 @@ export class ContractorService {
       console.log(error);
     }
   }
-    async removeContractorSpeciliaty(
-    id: string,
-  ) {
+  async removeContractorSpeciliaty(id: string) {
     try {
-      return await this.contractorSpeciliatyRepository.delete({id: id});
+      return await this.contractorSpeciliatyRepository.delete({ id: id });
     } catch (error) {
       console.log(error);
     }
   }
-  
+
   async searchContractorBySpeciliaty(specialityId: string) {
     let contractors = await this.contractorSpeciliatyRepository
       .createQueryBuilder('contractorSpeciliaty')

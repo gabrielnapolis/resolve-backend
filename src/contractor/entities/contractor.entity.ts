@@ -4,7 +4,6 @@ import { User } from 'src/user/user.entity';
 import { Work } from 'src/works/entities/work.entity';
 @Entity()
 export class Contractor extends User {
-
   @PrimaryGeneratedColumn()
   id: string;
 
@@ -15,7 +14,7 @@ export class Contractor extends User {
 
   @Column()
   fullname: string;
-  
+
   @Column({
     nullable: true,
   })
@@ -52,17 +51,17 @@ export class Contractor extends User {
   @Column({
     nullable: true,
   })
-  state:string;
+  state: string;
 
   @Column({
     nullable: true,
   })
-  cep:string;
+  cep: string;
 
   @Column({
     nullable: true,
   })
-  address:string;
+  address: string;
 
   @Column({
     nullable: true,
@@ -97,18 +96,12 @@ export class Contractor extends User {
   })
   facebookId: string;
 
-
   @OneToMany(
     (type) => ContractorSpeciality,
     (speciality) => speciality.contractor,
   )
- 
   specialities: ContractorSpeciality[];
 
-    @OneToMany(
-    (type) => Work,
-    (work) => work.contractor,
-  )
- 
+  @OneToMany((type) => Work, (work) => work.contractor)
   works?: Work[];
 }

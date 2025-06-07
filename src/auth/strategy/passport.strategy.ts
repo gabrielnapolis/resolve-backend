@@ -7,23 +7,23 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
-    @Inject('CONTRACTOR_REPOSITORY') 
-    private readonly contractorRepository: Repository<Contractor>) {
-      super({
+    @Inject('CONTRACTOR_REPOSITORY')
+    private readonly contractorRepository: Repository<Contractor>,
+  ) {
+    super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: process.env.JWT_SECRET!, 
+      secretOrKey: process.env.JWT_SECRET!,
     });
   }
 
   async validate(payload: any) {
-    
     let user = await this.contractorRepository.findOneBy({
       id: payload.id,
-      active: true
-    })
+      active: true,
+    });
 
-    if(!user) return false;
+    if (!user) return false;
 
     return user;
   }
