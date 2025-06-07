@@ -1,17 +1,27 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { ContractorService } from './contractor.service';
 import { CreateContractorDto } from './dto/create-contractor.dto';
 import { UpdateContractorDto } from './dto/update-contractor.dto';
 import { CreateContractorSpecialityDto } from './dto/create-contractor-speciality.dto';
 import { JwtAuthGuard } from 'src/auth/guard/passport-auth.guard';
 import { EmailService } from 'src/shared/email.service';
-import { UserType } from 'src/user/user.entity';
+import { UserType } from '../user/user.entity';
 
 @Controller('contractor')
 export class ContractorController {
-  constructor(private readonly contractorService: ContractorService,
-    private readonly emailService: EmailService
-  ) { }
+  constructor(
+    private readonly contractorService: ContractorService,
+    private readonly emailService: EmailService,
+  ) {}
 
   @Post()
   async create(@Body() createContractorDto: CreateContractorDto) {
@@ -19,33 +29,38 @@ export class ContractorController {
       let specialities = createContractorDto.specialities;
       delete createContractorDto.specialities;
       createContractorDto.active = true;
-      createContractorDto.type=UserType.CONTRACTOR;
+      createContractorDto.type = UserType.CONTRACTOR;
       createContractorDto.login = createContractorDto.email;
-      let contractor = await this.
-        contractorService.create(createContractorDto);
+      let contractor = await this.contractorService.create(createContractorDto);
 
-      specialities.forEach(async spec => {
+      specialities.forEach(async (spec) => {
         let contractorSpeciality: CreateContractorSpecialityDto = {
           speciality: spec,
-          contractor: contractor
-        }
-        let specSaved = await this.contractorService.addContractorSpeciliaty(contractorSpeciality)
-        console.log(specSaved)
-      })
-      return contractor
+          contractor: contractor,
+        };
+        let specSaved =
+          await this.contractorService.addContractorSpeciliaty(
+            contractorSpeciality,
+          );
+        console.log(specSaved);
+      });
+      return contractor;
     } catch (error) {
-      return error
+      return error;
     }
   }
 
   @Post('/speciality')
-  addSpeciality(@Body() createContractorSpecialityDto: CreateContractorSpecialityDto) {
+  addSpeciality(
+    @Body() createContractorSpecialityDto: CreateContractorSpecialityDto,
+  ) {
     try {
-      return this.contractorService.addContractorSpeciliaty(createContractorSpecialityDto);
+      return this.contractorService.addContractorSpeciliaty(
+        createContractorSpecialityDto,
+      );
     } catch (error) {
-      return error
+      return error;
     }
-
   }
 
   @UseGuards(JwtAuthGuard)
@@ -59,7 +74,7 @@ export class ContractorController {
     try {
       return this.contractorService.search(args);
     } catch (error) {
-      return error
+      return error;
     }
   }
 
@@ -67,10 +82,10 @@ export class ContractorController {
   async refinedSearch(@Body() args: any) {
     try {
       let contractors = await this.contractorService.search(args);
-      console.log(contractors)
-      return contractors
+      console.log(contractors);
+      return contractors;
     } catch (error) {
-      return error
+      return error;
     }
   }
 
@@ -86,7 +101,10 @@ export class ContractorController {
 
   @UseGuards(JwtAuthGuard)
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateContractorDto: UpdateContractorDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateContractorDto: UpdateContractorDto,
+  ) {
     return this.contractorService.update(id, updateContractorDto);
   }
 
@@ -99,7 +117,10 @@ export class ContractorController {
   @Post('/password')
   async changePassword(@Body() args: { id: string; password: string }) {
     try {
-      return await this.contractorService.changePassword(args.id, args.password);
+      return await this.contractorService.changePassword(
+        args.id,
+        args.password,
+      );
     } catch (error) {
       return error;
     }
@@ -108,8 +129,8 @@ export class ContractorController {
   @Post('/password')
   async resetPassword(@Body() args: { id: string }) {
     const char =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_-+=";
-    let password = "";
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_-+=';
+    let password = '';
     for (let i = 0; i < length; i++) {
       const ind = Math.floor(Math.random() * char.length);
       password += char[ind];

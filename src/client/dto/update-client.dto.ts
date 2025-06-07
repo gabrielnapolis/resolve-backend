@@ -10,7 +10,7 @@ export class UpdateClientDto extends PartialType(CreateClientDto) {
 
   birthday: string;
 
-  cpf: string;
+  cpf?: string;
 
   password: string;
 

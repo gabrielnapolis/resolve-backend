@@ -10,7 +10,7 @@ import {
 import { ClientService } from './client.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
-import { UserType } from 'src/user/user.entity';
+import { UserType } from '../user/user.entity';
 
 @Controller('client')
 export class ClientController {
@@ -19,7 +19,7 @@ export class ClientController {
   @Post()
   create(@Body() createClientDto: CreateClientDto) {
     createClientDto.login = createClientDto.email;
-    createClientDto.type=UserType.CLIENT;
+    createClientDto.type = UserType.CLIENT;
     try {
       return this.clientService.create(createClientDto);
     } catch (error) {

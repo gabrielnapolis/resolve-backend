@@ -6,5 +6,4 @@ export const adminProviders = [
     useFactory: (dataSource: DataSource) => dataSource.getRepository(Admin),
     inject: ['DATA_SOURCE'],
   },
-
 ];

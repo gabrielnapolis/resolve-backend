@@ -24,6 +24,7 @@ describe('PaymentService', () => {
             subscribe: jest.fn(),
             capturePix: jest.fn(),
             cancelSubscription: jest.fn(),
+            findSubscriberByEmail: jest.fn(),
           },
         },
         {

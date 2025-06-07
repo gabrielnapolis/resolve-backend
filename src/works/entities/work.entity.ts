@@ -1,14 +1,18 @@
-import { Client } from "src/client/entities/client.entity";
-import { Contractor } from "src/contractor/entities/contractor.entity";
-import { ContractorSpeciality } from "src/contractor/entities/contractorSpeciality.entity";
-import { PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, ManyToMany, Entity } from "typeorm";
+import { Client } from 'src/client/entities/client.entity';
+import { Contractor } from 'src/contractor/entities/contractor.entity';
+import { ContractorSpeciality } from 'src/contractor/entities/contractorSpeciality.entity';
+import {
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  ManyToMany,
+  Entity,
+} from 'typeorm';
 @Entity()
-export class Work { 
- @PrimaryGeneratedColumn()
+export class Work {
+  @PrimaryGeneratedColumn()
   id: string;
 
-
- 
   @Column({
     nullable: true,
   })
@@ -17,7 +21,7 @@ export class Work {
   @Column({
     nullable: true,
   })
-  state:string;
+  state: string;
 
   @Column({
     nullable: true,
@@ -30,16 +34,9 @@ export class Work {
   )
   specialities: ContractorSpeciality[];
 
-
-    @ManyToOne(
-    (type) => Contractor,
-    (contractor) => contractor.works, // Assuming Contractor has a 'works' property 
-  )
+  @ManyToOne((type) => Contractor, (contractor) => contractor.works)
   contractor: Contractor;
 
-     @ManyToOne(
-    (type) => Client,
-    (client) => client.works, // Assuming Client has a 'works' property 
-  )
-    client: Client;
+  @ManyToOne((type) => Client, (client) => client.works)
+  client: Client;
 }

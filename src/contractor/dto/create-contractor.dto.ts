@@ -1,5 +1,5 @@
-import { Speciality } from 'src/speciality/entities/speciality.entity';
-import { UserType } from 'src/user/user.entity';
+import { Speciality } from '../../speciality/entities/speciality.entity';
+import { UserType } from '../../user/user.entity';
 
 export class CreateContractorDto {
   picture: string;
@@ -11,7 +11,7 @@ export class CreateContractorDto {
   description: string;
   password: string;
   cep: string;
-  address:string;
+  address: string;
   state: string;
   city: string;
   neighborhood: string;
@@ -19,7 +19,6 @@ export class CreateContractorDto {
   specialities: Speciality[];
   isAdmin: boolean;
   active: boolean = true;
-  type: UserType= UserType.CONTRACTOR;
+  type: UserType = UserType.CONTRACTOR;
   login: string;
 }
-

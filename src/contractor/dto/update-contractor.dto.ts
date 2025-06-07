@@ -8,9 +8,9 @@ export class UpdateContractorDto extends PartialType(CreateContractorDto) {
 
   fullname: string;
 
-  birthday: string
-    
-  cpf:string
+  birthday: string;
+
+  cpf: string;
 
   email: string;
 
@@ -22,7 +22,7 @@ export class UpdateContractorDto extends PartialType(CreateContractorDto) {
 
   cep: string;
 
-  address:string;
+  address: string;
 
   city: string;
 
@@ -31,5 +31,4 @@ export class UpdateContractorDto extends PartialType(CreateContractorDto) {
   neighborhood: string;
 
   region: string;
-
 }

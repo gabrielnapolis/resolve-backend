@@ -52,7 +52,7 @@ export class PaymentController {
 
   @Post('/pagseguro/pix/webhook')
   Webhook(@Body() dto: any, @Request() request) {
-    if(dto && dto.charges){
+    if (dto && dto.charges) {
       return this.paymentService.processPix(dto);
     }
   }

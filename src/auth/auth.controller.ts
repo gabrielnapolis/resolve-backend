@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { GoogleAuthGuard } from './guard/google-auth.guard';
-import { SubscriptionRepository } from 'src/payment/repository/subscription.repository';
+import { SubscriptionRepository } from '../payment/repository/subscription.repository';
 import { FacebookAuthGuard } from './guard/facebook-auth.guard';
 import * as jwt from 'jsonwebtoken';
 
@@ -57,10 +57,9 @@ export class AuthController {
 
   @Get('facebook/callback')
   @UseGuards(FacebookAuthGuard)
-  async facebookCallback(@Req() req,  @Res() res) {
-
+  async facebookCallback(@Req() req, @Res() res) {
     let authenticatedUser = req.user; // O usuário retornado pela estratégia
-    
+
     if (!authenticatedUser) {
       const frontendUrl = process.env.FRONTEND_URL;
       res.redirect(`${frontendUrl}/auth/error?error=unauthorized`);
@@ -68,7 +67,11 @@ export class AuthController {
     }
 
     const token = jwt.sign(
-      { id: authenticatedUser.id, email: authenticatedUser.email, name: authenticatedUser.name },
+      {
+        id: authenticatedUser.id,
+        email: authenticatedUser.email,
+        name: authenticatedUser.name,
+      },
       process.env.JWT_SECRET!,
       { expiresIn: '1h' },
     );
@@ -84,9 +87,9 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
   async googleCallback(@Req() req, @Res() res) {
-    console.log(" google callback",req);
+    console.log(' google callback', req);
     const user = req.user as { id: string; email: string; name: string };
-    console.log(" google callback",user);
+    console.log(' google callback', user);
     if (!user) {
       const frontendUrl = process.env.FRONTEND_URL;
       return res.redirect(`${frontendUrl}/auth/error?error=unauthorized`);

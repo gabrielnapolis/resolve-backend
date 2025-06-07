@@ -27,7 +27,7 @@ export class AuthService {
     let payload = {
       id: contractor.id,
       userName: contractor.fullname,
-      contractor
+      contractor,
     };
 
     return payload;
@@ -37,20 +37,17 @@ export class AuthService {
     // Lógica para salvar o usuário no banco de dados, por exemplo
     return profile; // Retorna o perfil obtido do Facebook
   }
-  async verifyAsync(token:any): Promise<any> {
- try {
-      const payload = await this.jwtService.verifyAsync(
-        token,
-        {
-          secret:  process.env.secret
-        }
-      );
+  async verifyAsync(token: any): Promise<any> {
+    try {
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: process.env.secret,
+      });
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
       console.log(payload);
-       return  payload;
+      return payload;
     } catch {
       throw new UnauthorizedException();
     }
-}
+  }
 }

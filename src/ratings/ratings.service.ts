@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateRatingDto } from './dto/create-rating.dto';
 import { UpdateRatingDto } from './dto/update-rating.dto';
@@ -18,7 +17,9 @@ export class RatingsService {
   }
 
   async findByContractorId(contractorId: string): Promise<Rating[]> {
-    return await this.ratingRepository.findBy({ contractor: { id: contractorId } });
+    return await this.ratingRepository.findBy({
+      contractor: { id: contractorId },
+    });
   }
 
   async findAll(): Promise<Rating[]> {
@@ -30,7 +31,7 @@ export class RatingsService {
       throw new Error(`Rating with ID ${id} not found`);
     }
     return rating;
-  } 
+  }
   async update(id: string, updateRatingDto: UpdateRatingDto): Promise<Rating> {
     await this.ratingRepository.update(id, updateRatingDto);
     return this.findOne(id);

@@ -1,22 +1,19 @@
-import { PrimaryGeneratedColumn, Column, OneToMany, Entity } from 'typeorm';
+import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
 
 @Entity()
 export class User {
-
   @PrimaryGeneratedColumn()
   userId: string;
 
   @Column({
-   nullable: true,
+    nullable: true,
   })
   type: UserType;
 
   @Column({
-   nullable: true,
+    nullable: true,
   })
   login: string;
-
-  
 }
 export enum UserType {
   CLIENT = 'client',

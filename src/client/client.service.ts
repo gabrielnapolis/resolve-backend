@@ -6,30 +6,28 @@ import { Client } from './entities/client.entity';
 
 @Injectable()
 export class ClientService {
-  
-
   constructor(
     @Inject('CLIENT_REPOSITORY')
     private clientRepository: Repository<Client>,
   ) {}
 
   create(createClientDto: CreateClientDto) {
-   return this.clientRepository.save(createClientDto)
+    return this.clientRepository.save(createClientDto);
   }
 
   findAll() {
-  return  this.clientRepository.find()
+    return this.clientRepository.find();
   }
 
   findOne(id: string) {
-    this.clientRepository.findOneBy({id:id})
+    this.clientRepository.findOneBy({ id: id });
   }
 
   update(id: string, updateClientDto: UpdateClientDto) {
-    this.clientRepository.update({id:id},updateClientDto)
+    this.clientRepository.update({ id: id }, updateClientDto);
   }
 
   remove(id: string) {
-   // this.clientRepository.remove()
+    // this.clientRepository.remove()
   }
 }

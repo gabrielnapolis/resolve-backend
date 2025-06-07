@@ -31,17 +31,19 @@ export class SubscriptionRepository {
     });
   }
 
-  async update(data: Subscription){
+  async update(data: Subscription) {
     await this.subscriptionRepository.update(data.id, data);
-  } 
+  }
 
-  async find(whereClause: FindManyOptions<Subscription>): Promise<Subscription[] | null>  {
+  async find(
+    whereClause: FindManyOptions<Subscription>,
+  ): Promise<Subscription[] | null> {
     return await this.subscriptionRepository.find(whereClause);
   }
 
-  async getDefaultPlan(): Promise<Plan | null>  {
+  async getDefaultPlan(): Promise<Plan | null> {
     return await this.planRepository.findOneOrFail({
-      where: {   active: true},
+      where: { active: true },
     });
   }
 

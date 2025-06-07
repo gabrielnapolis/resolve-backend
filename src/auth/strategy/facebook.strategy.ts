@@ -53,7 +53,7 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
 
   private async findUserEmail(accessToken: string) {
     const response = await fetch(
-      `https://graph.facebook.com/v21.0/me?fields=id,name,email&access_token=${accessToken}`
+      `https://graph.facebook.com/v21.0/me?fields=id,name,email&access_token=${accessToken}`,
     );
     if (response.status !== 200) return null;
     const data = await response.json();

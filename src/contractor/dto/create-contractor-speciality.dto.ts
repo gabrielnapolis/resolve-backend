@@ -1,9 +1,8 @@
-import { Speciality } from "src/speciality/entities/speciality.entity";
-import { Contractor } from "../entities/contractor.entity";
+import { Speciality } from 'src/speciality/entities/speciality.entity';
+import { Contractor } from '../entities/contractor.entity';
 
 export class CreateContractorSpecialityDto {
+  contractor: Contractor;
 
-  contractor:Contractor
-  
-  speciality:Speciality
+  speciality: Speciality;
 }
