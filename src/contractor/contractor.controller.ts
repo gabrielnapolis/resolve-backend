@@ -12,8 +12,8 @@ import { ContractorService } from './contractor.service';
 import { CreateContractorDto } from './dto/create-contractor.dto';
 import { UpdateContractorDto } from './dto/update-contractor.dto';
 import { CreateContractorSpecialityDto } from './dto/create-contractor-speciality.dto';
-import { JwtAuthGuard } from 'src/auth/guard/passport-auth.guard';
-import { EmailService } from 'src/shared/email.service';
+import { JwtAuthGuard } from '../auth/guard/passport-auth.guard';
+import { EmailService } from '../shared/email.service';
 import { UserType } from '../user/user.entity';
 
 @Controller('contractor')
