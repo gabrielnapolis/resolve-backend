@@ -8,7 +8,6 @@ import {
   ManyToMany,
   Entity,
 } from 'typeorm';
-@Entity()
 
 export class Work { 
 

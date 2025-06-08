@@ -59,15 +59,28 @@ export class ContractorService {
 
   findAll() {
     return this.contractorRepository
-      .createQueryBuilder('contractor')
-      .innerJoinAndSelect('contractor.specialities', 'speciliaties')
-      .innerJoinAndSelect('speciliaties.speciality', 'speciality')
+      .createQueryBuilder('contractor').
+      select([
+        'contractor.fullname',
+        'contractor.region',
+        'contractor.city',
+        'contractor.description',
+        ])
+    //  .innerJoinAndSelect('contractor.specialities', 'speciliaties')
+   //   .innerJoinAndSelect('speciliaties.speciality', 'speciality')
       .getMany();
   }
 
   async findOne(id: string) {
     let contractor = await this.contractorRepository
-      .createQueryBuilder('contractor')
+      .createQueryBuilder('contractor')      
+      .select([
+        'contractor.fullname',
+        'contractor.region',
+        'contractor.city',
+        'contractor.description',
+        'contractor.specialities',
+      ])
       .innerJoinAndSelect('contractor.specialities', 'speciliaties')
       .innerJoinAndSelect('speciliaties.speciality', 'speciality')
       .where('contractor.id = :id', { id: id })
@@ -109,6 +122,13 @@ export class ContractorService {
   async searchContractorBySpeciliaty(specialityId: string) {
     let contractors = await this.contractorSpeciliatyRepository
       .createQueryBuilder('contractorSpeciliaty')
+        .select([
+        'contractor.fullname',
+        'contractor.region',
+        'contractor.city',
+        'contractor.description',
+        'contractor.specialities',
+      ])
       .innerJoinAndSelect('contractorSpeciliaty.contractor', 'contractor')
       .innerJoinAndSelect('contractorSpeciliaty.speciality', 'speciality')
       .where('speciality.id = :id', { id: specialityId })

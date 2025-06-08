@@ -1,3 +1,4 @@
+import { Review } from 'src/review/entities/review.entity';
 import { User } from 'src/user/user.entity';
 import { Work } from 'src/works/entities/work.entity';
 import { PrimaryGeneratedColumn, Column, Entity, OneToMany } from 'typeorm';
@@ -38,6 +39,11 @@ export class Client extends User {
   })
   city?: string;
 
-  @OneToMany((type) => Work, (work) => work.client)
-  works?: Work[];
+      @OneToMany(
+      (type) => Review,
+      (review) => review.client,
+    )
+    reviews: Review[];
+
+
 }

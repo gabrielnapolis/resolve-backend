@@ -2,6 +2,7 @@ import { PrimaryGeneratedColumn, Column, OneToMany, Entity } from 'typeorm';
 import { ContractorSpeciality } from './contractorSpeciality.entity';
 import { User } from 'src/user/user.entity';
 import { Work } from 'src/works/entities/work.entity';
+import { Review } from 'src/review/entities/review.entity';
 @Entity()
 export class Contractor extends User {
   @PrimaryGeneratedColumn()
@@ -102,6 +103,10 @@ export class Contractor extends User {
   )
   specialities: ContractorSpeciality[];
 
-  @OneToMany((type) => Work, (work) => work.contractor)
-  works?: Work[];
+    @OneToMany(
+    (type) => Review,
+    (review) => review.contractor,
+  )
+  reviews: Review[];
+
 }
