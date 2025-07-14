@@ -20,6 +20,10 @@ describe('AuthController', () => {
           provide: 'CONTRACTOR_REPOSITORY',
           useValue: {},
         },
+                {
+          provide: 'USER_REPOSITORY',
+          useValue: {},
+        },
         {
           provide: 'CONTRACTOR_SPECIALITY_REPOSITORY',
           useValue: {},

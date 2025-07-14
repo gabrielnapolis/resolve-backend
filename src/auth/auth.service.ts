@@ -6,8 +6,8 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject('CONTRACTOR_REPOSITORY')
-    private contractorRepository: Repository<Contractor>,
+    @Inject('USER_REPOSITORY')
+    private userRepository: Repository<Contractor>,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -17,7 +17,7 @@ export class AuthService {
   }
 
   async validateUser(user: { email: string; password: string }): Promise<any> {
-    let contractor = await this.contractorRepository.findOneBy({
+    let contractor = await this.userRepository.findOneBy({
       email: user.email?.toLocaleLowerCase(),
       password: user.password,
     });
