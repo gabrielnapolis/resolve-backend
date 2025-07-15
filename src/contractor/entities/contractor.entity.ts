@@ -5,8 +5,6 @@ import { Work } from 'src/works/entities/work.entity';
 import { Review } from 'src/review/entities/review.entity';
 @Entity()
 export class Contractor extends User {
-  @PrimaryGeneratedColumn()
-  id: string;
 
   @Column({
     nullable: true,
@@ -72,10 +70,6 @@ export class Contractor extends User {
   @Column()
   region: string;
 
-  @Column({
-    nullable: true,
-  })
-  isAdmin: boolean;
 
   @Column({
     nullable: true,

@@ -27,7 +27,7 @@ export class AuthService {
     if (!contractor) return null;
 
     let payload = {
-      id: contractor.userId,
+      id: contractor.id,
       userName: contractor.email,
       userType: contractor.type,
       contractor,

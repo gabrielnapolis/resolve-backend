@@ -20,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: any) {
     let user = await this.contractorRepository.findOneBy({
-      userId: payload.id,
+      id: payload.id,
     
     });
 

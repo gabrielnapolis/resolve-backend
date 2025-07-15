@@ -44,7 +44,7 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
 
     if (!user.facebookId) {
       user.facebookId = id;
-      await this.contractorRepository.update(user.userId, user);
+      await this.contractorRepository.update(user.id, user);
     } else if (user.facebookId !== id) {
       return null;
     }

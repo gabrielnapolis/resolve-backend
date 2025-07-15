@@ -1,9 +1,9 @@
 import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
 
 @Entity()
-export class User {
+export  class User {
   @PrimaryGeneratedColumn()
-  userId: string;
+  id: string;
 
   @Column({
     nullable: true,
@@ -13,18 +13,17 @@ export class User {
   @Column({
     nullable: true,
   })
-  login: string;
-    @Column({
-    nullable: false,
-  })
+
+ @Column()
   email: string;
-    @Column()
+
+  @Column()
   password: string;
   
-    @Column({
-      nullable: true,
-    })
-    facebookId: string;
+  @Column({
+    nullable: true,
+  })
+  facebookId: string;
   
 }
 export enum UserType {

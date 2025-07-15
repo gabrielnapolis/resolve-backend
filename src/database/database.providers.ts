@@ -8,6 +8,7 @@ import { Subscription } from 'src/payment/entities/subscription.entity';
 import { Plan } from 'src/payment/entities/plan.entity';
 import { Work } from 'src/works/entities/work.entity';
 import { Review } from 'src/review/entities/review.entity';
+import { User } from 'src/user/user.entity';
 //const { DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_NAME } = ;
 
 export const databaseProviders = [
@@ -20,7 +21,7 @@ export const databaseProviders = [
         port: 5432,
         username: process.env.DB_USERNAME || 'postgres',
         password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME || 'contractor',
+        database: process.env.DB_NAME || 'resolve',
         entities: [
          Contractor,
          Client,
@@ -29,7 +30,8 @@ export const databaseProviders = [
          Plan,
          Subscription,
          Work,
-         Review
+         Review,
+         User
         ],
         synchronize: true,
       });
