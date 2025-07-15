@@ -2,13 +2,14 @@ import { Inject, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, Profile } from 'passport-facebook';
 import { Contractor } from 'src/contractor/entities/contractor.entity';
+import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
   constructor(
-    @Inject('CONTRACTOR_REPOSITORY')
-    private readonly contractorRepository: Repository<Contractor>,
+    @Inject('USER_REPOSITORY')
+    private readonly contractorRepository: Repository<User>,
   ) {
     super({
       clientID: process.env.FACEBOOK_CLIENT_ID,
@@ -36,14 +37,14 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
 
     let user = await this.contractorRepository.findOneBy({
       email,
-      active: true,
+
     });
 
     if (!user) return null;
 
     if (!user.facebookId) {
       user.facebookId = id;
-      await this.contractorRepository.update(user.id, user);
+      await this.contractorRepository.update(user.userId, user);
     } else if (user.facebookId !== id) {
       return null;
     }

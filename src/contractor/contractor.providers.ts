@@ -15,7 +15,7 @@ export const contractorProviders = [
     useFactory: (dataSource: DataSource) =>
       dataSource.getRepository(ContractorSpeciality),
     inject: ['DATA_SOURCE'],
-  },,
+  },
       {
       provide: 'USER_REPOSITORY',
       useFactory: (dataSource: DataSource) =>

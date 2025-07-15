@@ -21,10 +21,6 @@ export class Contractor extends User {
   })
   cpf: string;
 
-  @Column({
-    nullable: true,
-  })
-  email: string;
 
   @Column({
     nullable: true,
@@ -46,8 +42,7 @@ export class Contractor extends User {
   })
   description: string;
 
-  @Column()
-  password: string;
+
 
   @Column({
     nullable: true,
@@ -91,11 +86,6 @@ export class Contractor extends User {
     nullable: true,
   })
   subscriberId: string;
-
-  @Column({
-    nullable: true,
-  })
-  facebookId: string;
 
   @OneToMany(
     (type) => ContractorSpeciality,

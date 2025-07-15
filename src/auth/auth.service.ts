@@ -1,13 +1,15 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { use } from 'passport';
 import { Contractor } from 'src/contractor/entities/contractor.entity';
+import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject('USER_REPOSITORY')
-    private userRepository: Repository<Contractor>,
+    private userRepository: Repository<User>,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -25,8 +27,9 @@ export class AuthService {
     if (!contractor) return null;
 
     let payload = {
-      id: contractor.id,
-      userName: contractor.fullname,
+      id: contractor.userId,
+      userName: contractor.email,
+      userType: contractor.type,
       contractor,
     };
 

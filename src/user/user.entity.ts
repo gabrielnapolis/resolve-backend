@@ -14,6 +14,18 @@ export class User {
     nullable: true,
   })
   login: string;
+    @Column({
+    nullable: false,
+  })
+  email: string;
+    @Column()
+  password: string;
+  
+    @Column({
+      nullable: true,
+    })
+    facebookId: string;
+  
 }
 export enum UserType {
   CLIENT = 'client',

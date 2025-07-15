@@ -2,13 +2,14 @@ import { Inject, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
 import { Contractor } from 'src/contractor/entities/contractor.entity';
+import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(
-    @Inject('CONTRACTOR_REPOSITORY')
-    private readonly contractorRepository: Repository<Contractor>,
+    @Inject('USER_REPOSITORY')
+    private readonly contractorRepository: Repository<User>,
   ) {
     super({
       clientID: process.env.GOOGLE_CLIENT_ID!,
@@ -34,7 +35,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
     let user = await this.contractorRepository.findOneBy({
       email: data.email,
-      active: true,
+
     });
 
     if (!user) return done(null, false);
